@@ -28,8 +28,7 @@ NOX Allows me to click on a spot on the map, click "Move here" and my GPS locati
   1. **Please Note:** Telegram seems to have some sort of rate limiting on how fast you can move from one place to another. As a result, you should make sure your "Near you" list actually updates when you move location. If it does not, wait a bit until it does. This usually takes a couple of minutes. This could theoretically be sped up by doing this as a group which makes it only a matter of minutes to locate a person which is a somewhat scary foresight.
 3. See if the user pops up and note the exact coordinates of your pin and the distance to that user.
 4. Repeat step 2 and 3 as much as you want (At least 3 times, give or take)
-5. Note them in an Excel sheet as I did here:
- <img src="_assets/tt1_excel.jpg" width="50%">
+5. Note them in an Excel sheet as in the example.
 6. Upload your Excel sheet to [https://www.gpsvisualizer.com/](https://www.gpsvisualizer.com/)
 7. Find where all the circles intersect each other, this is the location of the user.
 
