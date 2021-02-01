@@ -1,5 +1,6 @@
 import os
 import re
+import time
 
 import utils, settings
 
@@ -51,3 +52,60 @@ def expandLists():
 		print("Clicked \"Show More\" at ({}, {})".format(x, y))
 	else:
 		print("Found nothing, proceeding...")\
+
+# Function to scrape all entries
+def scrapeEntries():
+	print("Starting scraper...")
+
+	total = []
+	cnt = 1
+
+	while (True):
+		# We will keep track of iterations
+		print("Iteration {}...".format(cnt))
+
+		# Read screen
+		data = utils.readscreen(settings.areas['list'])
+
+		# Print read data for debug
+		if settings.settings['printdebug']:
+			print("=== DATA ===")
+			print(data)
+			print("=== END DATA ===")
+
+		# Remove empty lines
+		data = os.linesep.join([s for s in data.splitlines() if s])
+
+		# Split into list elements
+		data = data.splitlines()
+
+		# Check to see if we are at the end
+		if len(total) >= 2 and len(data) >= 2 and data[-1] == total[-1] and data[-2] == total[-2]:
+			break
+		
+		# Append current list to total
+		total += data
+
+		if cnt == 3:
+			break
+
+		# Scroll x users down
+		utils.scrollUsers(settings.settings['usersonscreen'])
+
+		# Five a second to level out
+		time.sleep(1)
+
+		# Increase iteration counter
+		cnt += 1
+
+	# Complete!
+	print("Scraping complete!")
+
+	# Print
+	print("===")
+	for line in total:
+		print(line)
+	print("===")
+	
+	# Return result
+	return total

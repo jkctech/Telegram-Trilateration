@@ -27,11 +27,11 @@ def click(pos):
     pyautogui.click(pos[0], pos[1])
 
 # Drag from point a to point b
-def drag(a, b):
+def drag(a, b, seconds = 1):
 	move(a)
 	pyautogui.mouseDown()
 	time.sleep(settings.settings['actionwait'])
-	pyautogui.moveTo(b[0], b[1], 1)
+	pyautogui.moveTo(b[0], b[1], seconds)
 	pyautogui.mouseUp()
 
 # Write a string emulating the keyboard
@@ -71,3 +71,18 @@ def setGeo(coords):
 
 	# Actually move GPS
 	click(settings.locations['move'])
+
+# Function to scroll 1 user entry further
+# We do it the dirty way to make sure we never leave the screen by picking the center of the list area.
+def scrollUsers(count):
+	start = (
+		settings.areas['list'][0] + (settings.areas['list'][2] - settings.areas['list'][0]) / 2,
+		settings.areas['list'][1] + (settings.areas['list'][3] - settings.areas['list'][1]) / 2,
+	)
+	
+	# Same coords but some pixels up of course (By decreasing the Y coord)
+	end = (start[0], start[1] -settings.settings['itemheight'] + settings.settings['dragbleed'])
+	
+	# Loop wanted amount of times
+	for i in range(count):
+		drag(start, end, 0.5)

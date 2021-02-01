@@ -1,5 +1,6 @@
 import pytesseract
 import time
+import os
 
 import settings, utils, scrape
 
@@ -8,12 +9,18 @@ pytesseract.pytesseract.tesseract_cmd = r'D:\Program Files\Tesseract-OCR\tessera
 
 # Runtimeeeee!
 scrape.expandLists()
+raw = scrape.scrapeEntries()
+
+# Save raw if wanted
+if settings.settings['savescrapes']:
+	with open('tmp/scrape_{}.txt'.format(time.time() / 1000), 'a') as f:
+		for line in raw:
+			line = line.strip()
+			if len(line) > 0:
+				f.write("{}\n".format(line))
 
 # Tests I want to save untill I am ready to use them
 exit()
-
-# Scroll 1 user item down
-utils.drag((350, 450), (350, 450 - (settings.settings['itemheight'] +  settings.settings['dragbleed'])))
 
 # Countdown and move spoofed GPS to coords
 for i in range(3, 0, -1):
