@@ -26,6 +26,14 @@ def move(pos):
 def click(pos):
     pyautogui.click(pos[0], pos[1])
 
+# Drag from point a to point b
+def drag(a, b):
+	move(a)
+	pyautogui.mouseDown()
+	time.sleep(settings.settings['actionwait'])
+	pyautogui.moveTo(b[0], b[1], 1)
+	pyautogui.mouseUp()
+
 # Write a string emulating the keyboard
 def write(text):
 	pyautogui.write(text)
@@ -41,7 +49,7 @@ def wipe():
 # Execute a GPS move
 def setGeo(coords):
 	# Latitude
-	click(settings.locations['lat'])
+	click(settings.locations['latlon'])
 	time.sleep(settings.settings['actionwait'])
 	wipe()
 	write(str(coords[0]))
@@ -49,7 +57,7 @@ def setGeo(coords):
 	time.sleep(settings.settings['actionwait'])
 
 	# Longitude
-	click(settings.locations['lon'])
+	pyautogui.press('tab')
 	time.sleep(settings.settings['actionwait'])
 	wipe()
 	write(str(coords[1]))
