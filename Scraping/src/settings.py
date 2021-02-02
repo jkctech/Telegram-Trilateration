@@ -1,6 +1,6 @@
 # Area defenitions
 areas = {}
-areas['list'] = (70, 393, 550, 975)
+areas['list'] = (612, 387, 1093, 1007)
 
 # Screen Location definitions
 locations = {}
@@ -29,16 +29,10 @@ settings['savescrapes'] = True
 settings['actionwait'] = 0.15
 
 # Height of a single element in the Telegram overview
-settings['itemheight'] = 66
-
-# Top-left pixel of the dividing line of the first item in the overview list.
-settings['firstpixel'] = (74, 393)
+settings['itemheight'] = 65
 
 # Amount of pixels mouse needs to move before NOX sees it as a "drag"
-settings['dragbleed'] = 7
-
-# Amount of users we should attempt to scroll if we detected more users.
-settings['scrollusers'] = 5
+settings['dragbleed'] = 8
 
 # Amount of users who are COMPLETELY visible on screen at a single time
 # (While unfolded and scrolled to the very top)

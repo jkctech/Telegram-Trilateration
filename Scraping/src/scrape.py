@@ -65,7 +65,7 @@ def scrapeEntries():
 		print("Iteration {}...".format(cnt))
 
 		# Read screen
-		data = utils.readscreen(settings.areas['list'])
+		data = utils.readscreen(settings.areas['list'], "tmp/tmp_{}.png".format(cnt))
 
 		# Print read data for debug
 		if settings.settings['printdebug']:
@@ -85,9 +85,6 @@ def scrapeEntries():
 		
 		# Append current list to total
 		total += data
-
-		if cnt == 3:
-			break
 
 		# Scroll x users down
 		utils.scrollUsers(settings.settings['usersonscreen'])

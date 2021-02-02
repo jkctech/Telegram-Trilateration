@@ -81,8 +81,8 @@ def scrollUsers(count):
 	)
 	
 	# Same coords but some pixels up of course (By decreasing the Y coord)
-	end = (start[0], start[1] -settings.settings['itemheight'] + settings.settings['dragbleed'])
+	end = (start[0], start[1] - (settings.settings['itemheight'] + settings.settings['dragbleed']))
 	
 	# Loop wanted amount of times
 	for i in range(count):
-		drag(start, end, 0.5)
+		drag(start, end, 0.2)

@@ -13,7 +13,7 @@ raw = scrape.scrapeEntries()
 
 # Save raw if wanted
 if settings.settings['savescrapes']:
-	with open('tmp/scrape_{}.txt'.format(time.time() / 1000), 'a') as f:
+	with open('tmp/scrape_{}.txt'.format(int(time.time())), 'a') as f:
 		for line in raw:
 			line = line.strip()
 			if len(line) > 0:
