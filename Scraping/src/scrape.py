@@ -9,7 +9,7 @@ def expandLists():
 	print("Searching for \"Show More\" entry in list...")
 
 	# Read screen
-	data = utils.readscreen(settings.areas['list'])
+	data = utils.readscreen(settings.areas['initiallist'])
 
 	# Print read data for debug
 	if settings.settings['printdebug']:
@@ -44,8 +44,8 @@ def expandLists():
 
 		# Find coords to click
 		# Ideally I should use bounding boxes of the text and stuff but for now, this will suffice
-		x = int(settings.areas['list'][0] + 20)
-		y = int(settings.areas['list'][1] + (5 * settings.settings['itemheight']) + (settings.settings['itemheight'] / 2))
+		x = int(settings.areas['initiallist'][0] + 20)
+		y = int(settings.areas['initiallist'][1] + (5 * settings.settings['itemheight']) + (settings.settings['itemheight'] / 2))
 
 		# Click
 		utils.click((x, y))
@@ -65,7 +65,7 @@ def scrapeEntries():
 		print("Iteration {}...".format(cnt))
 
 		# Read screen
-		data = utils.readscreen(settings.areas['list'], "tmp/tmp_{}.png".format(cnt))
+		data = utils.readscreen(settings.areas['initiallist'], "tmp/tmp_{}.png".format(cnt))
 
 		# Print read data for debug
 		if settings.settings['printdebug']:
