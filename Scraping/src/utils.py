@@ -2,6 +2,7 @@ import numpy as np
 import pyautogui
 import time
 import pytesseract
+import re
 
 from PIL import ImageGrab, Image
 from textblob import TextBlob
@@ -9,10 +10,11 @@ from textblob import TextBlob
 import settings
 
 # Function to return area from screen
-def readscreen(bbox, name = "tmp/tmp.png", correct = False):
-	screen = ImageGrab.grab(bbox=settings.areas['initiallist'])
+def readscreen(bbox, name = "tmp/DEBUG_screen.png", correct = False, export = False):
+	screen = ImageGrab.grab(bbox=bbox)
 	img = screen.convert('L')
-	img.save(name)
+	if export:
+		img.save(name)
 	text = pytesseract.image_to_string(img)
 	if correct:
 		text = TextBlob(text).correct()
@@ -27,7 +29,7 @@ def click(pos):
     pyautogui.click(pos[0], pos[1])
 
 # Drag from point a to point b
-def drag(a, b, seconds = 1):
+def drag(a, b, seconds = 0):
 	move(a)
 	pyautogui.mouseDown()
 	time.sleep(settings.settings['actionwait'])
@@ -72,6 +74,24 @@ def setGeo(coords):
 	# Actually move GPS
 	click(settings.points['move'])
 
+def scroll(distance):
+	# Move to center of clickable screen (Listport)
+	x = settings.areas['listport'][0] + (settings.areas['listport'][2] - settings.areas['listport'][0]) / 2
+	start = [x, 0]
+
+	if distance < 0:
+		# If below 0, we want to scroll DOWN
+		start[1] = settings.areas['listport'][3] - 10
+		end = (start[0], start[1] + distance - settings.settings['dragbleed'])
+	elif distance > 0:
+		# If above 0, we want to scroll UP
+		start[1] = settings.areas['listport'][1] + 10
+		end = (start[0], start[1] + distance + settings.settings['dragbleed'])
+	else:
+		return
+
+	drag(tuple(start), end)
+
 # Function to scroll 1 user entry further
 # We do it the dirty way to make sure we never leave the screen by picking the center of the list area.
 def scrollUsers(count):
@@ -85,7 +105,7 @@ def scrollUsers(count):
 	
 	# Loop wanted amount of times
 	for i in range(count):
-		drag(start, end, 0.2)
+		drag(start, end)
 
 # Scroll for a certain pixel color to be on the top pixel of that area
 def scrollForPixel(targetcolor, targetlocation, stepsize = 20, afterscroll = 0, safety = -1):
@@ -138,3 +158,27 @@ def scrollForPixel(targetcolor, targetlocation, stepsize = 20, afterscroll = 0, 
 	# Release mouse and close
 	pyautogui.mouseUp()
 	return False
+
+def isdistance(input):
+	res = re.match(r"\d+\.?\d*\s?k?m\s?away", input) != None
+	if settings.settings['printdebug']:
+		print("Checking if '{}' is a distance: [{}]".format(input, ("True" if res else "False")))
+	return (res)
+
+def getdistance(input):
+	# Cleanup
+	input = input.strip()
+
+	# Only first part is important
+	distance = input.split(' ')[0]
+
+	# If we have a dot in the remainder, the data is in km, else in m
+	if '.' in distance:
+		tmp = distance.split('.')
+		a = int(re.sub('[^0-9]','', tmp[0]))
+		b = int(re.sub('[^0-9]','', tmp[1]))
+		distance = (a * 1000) + (b * 10)
+	else:
+		distance = int(re.sub('[^0-9]','', distance))
+	
+	return (distance)

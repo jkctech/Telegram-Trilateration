@@ -60,15 +60,19 @@ settings['topbar'] = 81
 
 # Amount of users who are COMPLETELY visible on screen at a single time
 # (While unfolded and scrolled to the very top)
-settings['usersonscreen'] = 9
+settings['usersonscreen'] = 14
+
+# If you have a higher resolution than your native resolution, the scrolling might drift.
+# To counter this, we re-align after a page
+settings['fixscrolldrift'] = True
 
 
 # Calculations done using the settings themselves
 
-# Viewport area on the screen
-# Basically same as areas['screen'] but added the topbar
-areas['viewport'] = (
-	areas['screen'][0],
+# List area on the screen
+# Basically same as areas['screen'] but added the topbar and no images on the left
+areas['listport'] = (
+	areas['screen'][0] + 67,
 	areas['screen'][1] + settings['topbar'],
 	areas['screen'][2],
 	areas['screen'][3],
