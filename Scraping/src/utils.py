@@ -3,6 +3,7 @@ import pyautogui
 import time
 import pytesseract
 import re
+import win32gui, win32con
 
 from PIL import ImageGrab, Image
 from textblob import TextBlob
@@ -96,8 +97,8 @@ def scroll(distance):
 # We do it the dirty way to make sure we never leave the screen by picking the center of the list area.
 def scrollUsers(count):
 	start = (
-		settings.areas['initiallist'][0] + (settings.areas['initiallist'][2] - settings.areas['initiallist'][0]) / 2,
-		settings.areas['initiallist'][1] + (settings.areas['initiallist'][3] - settings.areas['initiallist'][1]) / 2,
+		settings.areas['listport'][0] + (settings.areas['listport'][2] - settings.areas['listport'][0]) / 2,
+		settings.areas['listport'][1] + (settings.areas['listport'][3] - settings.areas['listport'][1]) / 2,
 	)
 	
 	# Same coords but some pixels up of course (By decreasing the Y coord)
@@ -114,8 +115,8 @@ def scrollForPixel(targetcolor, targetlocation, stepsize = 20, afterscroll = 0, 
 
 	# Move just above middle bottom pixel of screen to start drag.
 	start = (
-		settings.areas['initiallist'][0] + (settings.areas['initiallist'][2] - settings.areas['initiallist'][0]) / 2,
-		settings.areas['initiallist'][3] - 10,
+		settings.areas['listport'][0] + (settings.areas['listport'][2] - settings.areas['listport'][0]) / 2,
+		settings.areas['listport'][3] - 10,
 	)
 	move(start)
 
@@ -159,12 +160,32 @@ def scrollForPixel(targetcolor, targetlocation, stepsize = 20, afterscroll = 0, 
 	pyautogui.mouseUp()
 	return False
 
+# Align screen to the first user item
+def firstalign():
+	print("Aligning for first user...")
+	scrolled = scrollForPixel(
+		settings.colors['line'],
+		(
+			settings.areas['screen'][2],
+			settings.areas['screen'][1] + settings.settings['topbar'] + 2
+		),
+		afterscroll=5,
+		safety=50
+	)
+	if scrolled:
+		print("Aligned!")
+	else:
+		print("Could not find alignment, aborting.")
+		exit(1)
+
+# Classifies if a string is a distance string
 def isdistance(input):
 	res = re.match(r"\d+\.?\d*\s?k?m\s?away", input) != None
 	if settings.settings['printdebug']:
 		print("Checking if '{}' is a distance: [{}]".format(input, ("True" if res else "False")))
 	return (res)
 
+# Returns a distance in meters from the inputstring from Telegram
 def getdistance(input):
 	# Cleanup
 	input = input.strip()
@@ -182,3 +203,56 @@ def getdistance(input):
 		distance = int(re.sub('[^0-9]','', distance))
 	
 	return (distance)
+
+# Confirm certain pixels are of a certain color
+def confirmpixels(pixelgroup):
+	# Create bounding box
+	# There is probably a more "Python" version of doing this
+	# And I KNOW this is dirty...
+	xmin = xmax = pixelgroup[0][0][0]
+	ymin = ymax = pixelgroup[0][0][1]
+
+	# Skipping over the first item since we used it to set the startpoints
+	for group in pixelgroup[1:]:
+		point = group[0]
+		if point[0] < xmin:
+			xmin = point[0]
+		if point[1] < ymin:
+			ymin = point[1]
+		if point[0] > xmax:
+			xmax = point[0]
+		if point[1] > ymax:
+			ymax = point[1]
+	
+	# Increase since grab is not inclusive
+	xmax += 1
+	ymax += 1
+	
+	bbox = (xmin, ymin, xmax, ymax)
+
+	# Grab screen
+	image = ImageGrab.grab(bbox=bbox)
+	
+	# Confirm pixels are correct
+	for group in pixelgroup:
+		color = group[1]
+		point = (group[0][0] - xmin, group[0][1] - ymin)
+		pixel = image.getpixel(point)
+		if pixel != color:
+			return False
+
+	return True
+
+# Collect windows to list
+def windowEnumerationHandler(hwnd, windows):
+	windows.append((hwnd, win32gui.GetWindowText(hwnd)))
+
+# Focus and maximize Nx
+def focusnox():
+	windows = []
+	win32gui.EnumWindows(windowEnumerationHandler, windows)
+	for i in windows:
+		if "noxplayer" in i[1].lower():
+			win32gui.ShowWindow(i[0], win32con.SW_MAXIMIZE)
+			win32gui.SetForegroundWindow(i[0])
+			break

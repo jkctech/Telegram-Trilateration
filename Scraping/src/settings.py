@@ -1,22 +1,43 @@
 # Area defenitions
 areas = {}
+
+# Bounding box of the NOX touchscreen.
+# Some libraries in this project don't like multi-monitor setups,
+# so please leave the main window at your primary screen.
 areas['screen'] = (545, 32, 1093, 1007)
-areas['initiallist'] = (612, 387, 1093, 1007)
+
+# The "You are here" text in the GPS window (RELATIVE)
+areas['gpsreadback'] = (8, 584, 356, 619) 
 
 
-# Clickable screen points
+# Pixelgroups
+# Used to confirm correct screens
+# Contains arrays of pixel points and RGB colors
+pixelgroups = {}
+
+pixelgroups['nearby'] = [
+	[(818, 108), (102, 169, 224)], # Blue in the GPS icon
+	[(818, 126), (102, 169, 224)], # Blue in the GPS icon
+	[(818, 138), (255, 255, 255)], # White in the GPS icon
+]
+
+
+# (Clickable) screen points
 points = {}
-points['latlon'] = (1050, 105) # Location of the 'Lat' field in the NOX GPS Window
-points['move'] = (1160, 600) # Location of the 'Move Here' button
+points['focus'] = (1400, 400) # Point to click to make sure we have focus on NOX
+points['center'] = (825, 500) # Point to have mouse on screen
+points['latlon'] = (462, 96) # Location of the 'Lat' field in the NOX GPS Window (RELATIVE)
+points['move'] = (568, 602) # Location of the 'Move Here' button (RELATIVE)
+points['gpswindow'] = (1680, 0) # Top left pixel of where the GPS window is located (ABSOLUTE)
 
 
-# Location coordinates for scanning
+# Location coordinates for triliteration
 coords = {
-	(52.929502, 4.8012571),
-	(52.965476, 4.7217422),
-	(52.929502, 4.7217422),
-	(52.965476, 4.8012571),
-	(52.940832, 4.7577242)
+	"a": (52.929502, 4.8012571),
+	"b": (52.965476, 4.7217422),
+	"c": (52.929502, 4.7217422),
+	"d": (52.965476, 4.8012571),
+	"e": (52.940832, 4.7577242)
 }
 
 
@@ -39,6 +60,10 @@ colors['text'] = (30, 136, 211)
 
 # Settings
 settings = {}
+
+# Tesseract executable location.
+# Replace by "" if you with to use your PATH default.
+settings['tesseract'] = ""
 
 # Prints some more info on the screen
 settings['printdebug'] = False
@@ -68,6 +93,7 @@ settings['fixscrolldrift'] = True
 
 
 # Calculations done using the settings themselves
+# === You should probably not edit anything beyond this point! ===
 
 # List area on the screen
 # Basically same as areas['screen'] but added the topbar and no images on the left
@@ -76,4 +102,20 @@ areas['listport'] = (
 	areas['screen'][1] + settings['topbar'],
 	areas['screen'][2],
 	areas['screen'][3],
+)
+
+# Convert relative position of GPS window points
+areas['gpsreadback'] = (
+	areas['gpsreadback'][0] + points['gpswindow'][0],
+	areas['gpsreadback'][1] + points['gpswindow'][1],
+	areas['gpsreadback'][2] + points['gpswindow'][0],
+	areas['gpsreadback'][3] + points['gpswindow'][1],
+)
+points['latlon'] = (
+	points['latlon'][0] + points['gpswindow'][0],
+	points['latlon'][1] + points['gpswindow'][1],
+)
+points['move'] = (
+	points['move'][0] + points['gpswindow'][0],
+	points['move'][1] + points['gpswindow'][1],
 )
