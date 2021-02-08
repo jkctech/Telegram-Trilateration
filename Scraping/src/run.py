@@ -6,6 +6,9 @@ import settings, utils, scrape, exporter
 
 import datetime
 
+# Flags (And defaults)
+f_export = "xlsx"
+
 try:
 	# Focus and maximize the NOX window
 	# Somewhat buggy since NOX does not use native Windows forms
@@ -53,8 +56,18 @@ try:
 	raw = scrape.scrapeEntries()
 
 	# Export
-	filename = "results/result_{}.xlsx".format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
-	exporter.exportDistancesXLSX(raw, coords, filename=filename)
+	# Should actually make this into a proper jumptable but whatever
+	filename = "results/result_{}".format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
+
+	# XLSX
+	if f_export == "xlsx":
+		filename += ".xlsx"
+		exporter.exportDistancesXLSX(raw, coords, filename=filename)
+	
+	# JSON
+	elif f_export == "json":
+		filename += ".json"
+		exporter.exportDistancesJSON(raw, coords, filename=filename)
 
 # Using the PyAutoGUI failsafe
 except pyautogui.FailSafeException:
