@@ -70,6 +70,9 @@ settings['tesseract'] = ""
 # Prints some more info on the screen
 settings['printdebug'] = False
 
+# Amount of users to scroll per "page"
+settings['usersonscreen'] = 14
+
 # Amount of seconds to wait between certain mouse / keyboard events
 settings['actionwait'] = 0.15
 
@@ -82,11 +85,8 @@ settings['dragbleed'] = 8
 # Size of the android navbar + the topbar inside Telegram. (24 + 57)
 settings['topbar'] = 81
 
-# Amount of users who are COMPLETELY visible on screen at a single time
-# (While unfolded and scrolled to the very top)
-settings['usersonscreen'] = 14
-
-# If you have a higher resolution than your native resolution, the scrolling might drift.
+# If you have a higher resolution than the tablet's native resolution, the scrolling might drift.
+# This is because of the fact that we can't scroll half pixels.
 # To counter this, we re-align after a page
 settings['fixscrolldrift'] = True
 
@@ -95,7 +95,7 @@ settings['fixscrolldrift'] = True
 # === You should probably not edit anything beyond this point! ===
 
 # List area on the screen
-# Basically same as areas['screen'] but added the topbar and no images on the left
+# Basically same as areas['screen'] but subtracted the topbar and the images on the left
 areas['listport'] = (
 	areas['screen'][0] + 67,
 	areas['screen'][1] + settings['topbar'],
@@ -118,3 +118,8 @@ points['move'] = (
 	points['move'][0] + points['gpswindow'][0],
 	points['move'][1] + points['gpswindow'][1],
 )
+points['close'] = (
+	points['close'][0] + points['gpswindow'][0],
+	points['close'][1] + points['gpswindow'][1],
+)
+

@@ -10,7 +10,7 @@ def expandLists():
 	print("Searching for \"Show More\" entry in list...")
 
 	# Read screen
-	data = utils.readscreen(settings.areas['listport'], export=True)
+	data = utils.readscreen(settings.areas['listport'])
 
 	# Remove empty lines
 	data = os.linesep.join([s for s in data.splitlines() if s])
@@ -58,7 +58,7 @@ def expandLists():
 def scrapeEntries():
 	# Start and note time
 	starttime = time.time()
-	print("Starting scraper at [{}] ({} Per page)".format(datetime.datetime.now().strftime("%H:%M:%S"), settings.settings['usersonscreen']))
+	print("Starting scraper at [{}]".format(datetime.datetime.now().strftime("%H:%M:%S")))
 	print("Indexing users...")
 
 	total = [[], []]

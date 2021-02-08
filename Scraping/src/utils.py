@@ -4,21 +4,25 @@ import time
 import pytesseract
 import re
 import win32gui, win32con
+import PIL.ImageOps
 
 from PIL import ImageGrab, Image
-from textblob import TextBlob
 
 import settings
 
 # Function to return area from screen
-def readscreen(bbox, name = "tmp/DEBUG_screen.png", correct = False, export = False):
+def readscreen(bbox, name = "tmp/DEBUG_screen.png", correct = False, invert = False):
 	screen = ImageGrab.grab(bbox=bbox)
 	img = screen.convert('L')
-	if export:
-		img.save(name)
+
+	if invert:
+		img = PIL.ImageOps.invert(img)
+
 	text = pytesseract.image_to_string(img)
+
 	if correct:
 		text = TextBlob(text).correct()
+
 	return text
 
 # Move mouse to location
@@ -276,6 +280,9 @@ def parseCoord(raw):
 	# finds '.' where ':' is in the string which would mess up my logic.
 	result = result[re.search(r"\d", result).start():]
 
+	# Replace ',' by '.'
+	result = result.replace(',', '.')
+
 	# Remove all non-digits (Except for the '.')
 	result = re.sub('[^0-9\.]+$', '', result)
 	return result
@@ -288,7 +295,9 @@ def getGPSCoords():
 	time.sleep(3)
 
 	# Extract from screen
-	raw = readscreen(settings.areas['gpsreadback'])
+	raw = readscreen(settings.areas['gpsreadback'], invert=True)
+
+	lat = lon = None
 
 	# Split on space and loop over items
 	items = raw.split(' ')

@@ -2,7 +2,9 @@ import pytesseract
 import time
 import os
 import pyautogui
-import settings, utils, scrape
+import settings, utils, scrape, exporter
+
+import datetime
 
 try:
 	# Focus and maximize the NOX window
@@ -29,6 +31,11 @@ try:
 		exit(1)
 	else:
 		print("Found location: {}".format(coords))
+		time.sleep(1)
+	
+	# Close GPS window
+	utils.click(settings.points['close'])
+	time.sleep(2)
 
 	# I didn't put my tesseract in my PATH properly, too lazy to fix :)
 	# If you one of those people as well, feel free to use this in from your config
@@ -44,6 +51,10 @@ try:
 
 	# Runtimeeeee!
 	raw = scrape.scrapeEntries()
+
+	# Export
+	filename = "results/result_{}.xlsx".format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
+	exporter.exportDistancesXLSX(raw, coords, filename=filename)
 
 # Using the PyAutoGUI failsafe
 except pyautogui.FailSafeException:
