@@ -23,12 +23,14 @@ pixelgroups['nearby'] = [
 
 
 # (Clickable) screen points
+# If marked as relative, you should probably not touch them.
 points = {}
 points['focus'] = (1400, 400) # Point to click to make sure we have focus on NOX
 points['center'] = (825, 500) # Point to have mouse on screen
+points['gpswindow'] = (494, 190) # Top left pixel of where the GPS window is located (ABSOLUTE)
 points['latlon'] = (462, 96) # Location of the 'Lat' field in the NOX GPS Window (RELATIVE)
 points['move'] = (568, 602) # Location of the 'Move Here' button (RELATIVE)
-points['gpswindow'] = (1680, 0) # Top left pixel of where the GPS window is located (ABSOLUTE)
+points['close'] = (682, 16) # Location of the close button (RELATIVE)
 
 
 # Location coordinates for triliteration

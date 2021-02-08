@@ -253,6 +253,56 @@ def focusnox():
 	win32gui.EnumWindows(windowEnumerationHandler, windows)
 	for i in windows:
 		if "noxplayer" in i[1].lower():
-			win32gui.ShowWindow(i[0], win32con.SW_MAXIMIZE)
+			#win32gui.ShowWindow(i[0], win32con.SW_MAXIMIZE)
+			win32gui.ShowWindow(i[0], win32con.SW_NORMAL)
 			win32gui.SetForegroundWindow(i[0])
-			break
+			return True
+	return False
+
+# Open Nox's GPS window using the shortcut
+def gps_open():
+	pyautogui.keyDown('ctrl')
+	pyautogui.keyDown('9')
+	pyautogui.keyUp('9')
+	pyautogui.keyUp('ctrl')
+
+# Parse a raw coordinate string from the GPS window
+def parseCoord(raw):
+	# Strip spaces
+	result = raw.strip()
+
+	# Look for the first digit in the string and cut from there
+	# We can't rely on just the re.sub() because the OCR engine sometimes
+	# finds '.' where ':' is in the string which would mess up my logic.
+	result = result[re.search(r"\d", result).start():]
+
+	# Remove all non-digits (Except for the '.')
+	result = re.sub('[^0-9\.]+$', '', result)
+	return result
+
+# Select and extract GPS coords through GPS window.
+def getGPSCoords():
+	# Attempt to retrieve current GPS pos
+	print("Opening GPS window...")
+	gps_open()
+	time.sleep(3)
+
+	# Extract from screen
+	raw = readscreen(settings.areas['gpsreadback'])
+
+	# Split on space and loop over items
+	items = raw.split(' ')
+	for i in items:
+		# If starts with Lat or Long, we know we want the strings
+		# We use parseCoord() to parse that item to the real coordinate
+		if i.startswith("Lat") != False:
+			lat = parseCoord(i)
+		elif i.startswith("Long") != False:
+			lon = parseCoord(i)
+	
+	# If we miss one of them, abort
+	if (lat == None or lon == None):
+		return False
+	
+	# Build a GPS tuple and return
+	return (float(lat), float(lon))

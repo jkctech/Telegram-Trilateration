@@ -2,13 +2,14 @@ import pytesseract
 import time
 import os
 import pyautogui
-
 import settings, utils, scrape
 
 try:
 	# Focus and maximize the NOX window
 	# Somewhat buggy since NOX does not use native Windows forms
-	utils.focusnox()
+	if utils.focusnox() == False:
+		print("Could not detect Nox... Aborting!")
+		exit(1)
 	time.sleep(1)
 	utils.click(settings.points['focus'])
 
@@ -19,6 +20,17 @@ try:
 		exit(1)
 	else:
 		print("Seems OK, proceeding...")
+
+	# Extract current coordinates
+	print("Looking for current GPS coordinates...")
+	coords = utils.getGPSCoords()
+	if coords == False:
+		print("Could not extract GPS location... Aborting!")
+		exit(1)
+	else:
+		print("Found location: {}".format(coords))
+
+	exit()
 
 	# I didn't put my tesseract in my PATH properly, too lazy to fix :)
 	# If you one of those people as well, feel free to use this in from your config
