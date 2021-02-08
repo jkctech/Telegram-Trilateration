@@ -70,9 +70,6 @@ settings['tesseract'] = ""
 # Prints some more info on the screen
 settings['printdebug'] = False
 
-# Save raw scrapes in txt files
-settings['savescrapes'] = True
-
 # Amount of seconds to wait between certain mouse / keyboard events
 settings['actionwait'] = 0.15
 

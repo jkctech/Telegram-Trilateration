@@ -30,8 +30,6 @@ try:
 	else:
 		print("Found location: {}".format(coords))
 
-	exit()
-
 	# I didn't put my tesseract in my PATH properly, too lazy to fix :)
 	# If you one of those people as well, feel free to use this in from your config
 	if len(settings.settings['tesseract']) > 0:
@@ -46,12 +44,6 @@ try:
 
 	# Runtimeeeee!
 	raw = scrape.scrapeEntries()
-
-	# Save raw if wanted
-	if settings.settings['savescrapes']:
-		with open('tmp/scrape_{}.txt'.format(int(time.time())), 'a') as f:
-			for line in raw:
-				f.write("{}\n".format(line))
 
 # Using the PyAutoGUI failsafe
 except pyautogui.FailSafeException:
