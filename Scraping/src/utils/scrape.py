@@ -3,14 +3,14 @@ import re
 import time
 import datetime
 
-import utils, settings
+from utils import functions, settings
 
 # Function to unfold the "Show More" list on the screen.
 def expandLists():
 	print("Searching for \"Show More\" entry in list...")
 
 	# Read screen
-	data = utils.readscreen(settings.areas['listport'])
+	data = functions.readscreen(settings.areas['listport'])
 
 	# Remove empty lines
 	data = os.linesep.join([s for s in data.splitlines() if s])
@@ -24,20 +24,6 @@ def expandLists():
 		print(items)
 		print("=== END DATA ===")
 
-	# Method to find "show more" dynamically
-	# pos = -1 
-	# for i in range(len(items)):
-	# 	# Matching it not very accurately since sometimes the OCR engine fucks up
-	# 	# In the case tha a user is actually called "Show More (69)" this will break
-	# 	if re.match(r"Show\s?More\s?\(.*\)", items[i]):
-	# 		if settings.settings['printdebug']:
-	# 			print("Found \"Show more\" at {}!".format(i))
-	# 		pos = i
-	# 		break
-
-	# Click if needed
-	# if pos != -1:
-
 	# Find "show more" which should be the 6th item in the list
 	# This means 5 items will preceed it, and thus should be at index 10
 	if re.match(r"Show\s?More\s?\(.*\)", items[10]):
@@ -49,7 +35,7 @@ def expandLists():
 		y = int(settings.areas['listport'][1] + (5 * settings.settings['itemheight']) + (settings.settings['itemheight'] / 2))
 
 		# Click
-		utils.click((x, y))
+		functions.click((x, y))
 		print("Clicked \"Show More\" at ({}, {})".format(x, y))
 	else:
 		print("Found nothing, proceeding...")\
@@ -71,7 +57,7 @@ def scrapeEntries():
 		print("Page {}...".format(cnt))
 
 		# Read screen
-		data = utils.readscreen(settings.areas['listport'], "tmp/tmp_{}.png".format(cnt))
+		data = functions.readscreen(settings.areas['listport'], "tmp/tmp_{}.png".format(cnt))
 
 		# Remove empty lines
 		data = os.linesep.join([s for s in data.splitlines() if s])
@@ -95,13 +81,13 @@ def scrapeEntries():
 				continue
 
 			# We have a valid combination
-			if i + 1 < len(data) and utils.isdistance(data[i]) == False and utils.isdistance(data[i + 1]) == True:
+			if i + 1 < len(data) and functions.isdistance(data[i]) == False and functions.isdistance(data[i + 1]) == True:
 				# Debugging
 				if settings.settings['printdebug']:
 					print("Found {} @ {}".format(data[i], data[i + 1]))
 				
 				# Tuple to add to the list
-				tup = (data[i], utils.getdistance(data[i + 1]))
+				tup = (data[i], functions.getdistance(data[i + 1]))
 
 				# Append to correct group and stop if we have a double
 				if (index == 0 and tup not in total[0]) or (index == 1 and tup not in total[0] and tup not in total[1]):
@@ -121,13 +107,13 @@ def scrapeEntries():
 			break
 
 		# Scroll x users down
-		utils.scrollUsers(settings.settings['usersonscreen'])
+		functions.scrollUsers(settings.settings['usersonscreen'])
 
 		# Fix scroll drifting
 		if settings.settings['fixscrolldrift']:
-			utils.scroll(settings.settings['itemheight'] / 2)
+			functions.scroll(settings.settings['itemheight'] / 2)
 			print("Compensating for drift...")
-			scrolled = utils.scrollForPixel(
+			scrolled = functions.scrollForPixel(
 				settings.colors['line'],
 				(
 					settings.areas['screen'][2],

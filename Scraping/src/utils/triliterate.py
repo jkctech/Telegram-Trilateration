@@ -86,16 +86,23 @@ def triliterate_correct(raw):
 
 	return (lat, lon)
 
-# Example data
-# This is temporary
-raw = [
-	(52.907848, 4.684513, 6420),
-	(52.94083, 4.7577238, 1430),
-	(52.894424, 4.8364009, 8780)
-]
+# Example
+if __name__ == '__main__':
+	# Coordinates and distances in meters
+	raw = [
+		(52.907848, 4.684513, 6420),
+		(52.94083, 4.7577238, 1430),
+		(52.894424, 4.8364009, 8780)
+	]
 
-# Execute triliteration
-res = triliterate_correct(raw)
+	print("Inputs:")
 
-# Print, but with rounding to 7th digit.
-print((round(res[0], 7), round(res[1], 7)))
+	for i in raw:
+		print("{}\t{}\t[{} m distance]".format(i[0], i[1], i[2]))
+
+	# Execute triliteration
+	res = triliterate_correct(raw)
+
+	# Print, but with rounding to 7th digit.
+	print("\nResult:")
+	print((round(res[0], 7), round(res[1], 7)))

@@ -2,7 +2,8 @@ import pytesseract
 import time
 import os
 import pyautogui
-import settings, utils, scrape, exporter
+
+from utils import settings, functions, scrape, exporter
 
 import datetime
 
@@ -12,15 +13,15 @@ f_export = "xlsx"
 try:
 	# Focus and maximize the NOX window
 	# Somewhat buggy since NOX does not use native Windows forms
-	if utils.focusnox() == False:
+	if functions.focusnox() == False:
 		print("Could not detect Nox... Aborting!")
 		exit(1)
 	time.sleep(1)
-	utils.click(settings.points['focus'])
+	functions.click(settings.points['focus'])
 
 	# Confirm we are on the right screen
 	print("Checking if we are on the \"Nearby\" screen...")
-	if utils.confirmpixels(settings.pixelgroups['nearby']) == False:
+	if functions.confirmpixels(settings.pixelgroups['nearby']) == False:
 		print("Not on correct screen inside Nox... Aborting!")
 		exit(1)
 	else:
@@ -28,7 +29,7 @@ try:
 
 	# Extract current coordinates
 	print("Looking for current GPS coordinates...")
-	coords = utils.getGPSCoords()
+	coords = functions.getGPSCoords()
 	if coords == False:
 		print("Could not extract GPS location... Aborting!")
 		exit(1)
@@ -37,7 +38,7 @@ try:
 		time.sleep(1)
 	
 	# Close GPS window
-	utils.click(settings.points['close'])
+	functions.click(settings.points['close'])
 	time.sleep(2)
 
 	# I didn't put my tesseract in my PATH properly, too lazy to fix :)
@@ -46,7 +47,7 @@ try:
 		pytesseract.pytesseract.tesseract_cmd = settings.settings['tesseract']
 
 	# Align screen for start
-	utils.firstalign()
+	functions.firstalign()
 
 	# See if we have to unfold user list (> 5 users) and settle out
 	scrape.expandLists()
@@ -88,5 +89,5 @@ for i in range(3, 0, -1):
 	time.sleep(1)
 
 for k in settings.coords.keys():
-	utils.setGeo(settings.coords[k])
+	functions.setGeo(settings.coords[k])
 	time.sleep(1)

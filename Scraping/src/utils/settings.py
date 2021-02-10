@@ -7,7 +7,11 @@ areas = {}
 areas['screen'] = (545, 32, 1093, 1007)
 
 # The "You are here" text in the GPS window (RELATIVE)
-areas['gpsreadback'] = (8, 584, 356, 619) 
+areas['gpsreadback'] = (8, 584, 356, 619)
+
+# GPS window of Nox has a broken Google Maps iframe
+# Used for detecting the "OK" button
+areas['gpsok'] = (636, 115, 676, 145)
 
 
 # Pixelgroups

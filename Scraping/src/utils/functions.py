@@ -8,7 +8,7 @@ import PIL.ImageOps
 
 from PIL import ImageGrab, Image
 
-import settings
+from utils import settings
 
 # Function to return area from screen
 def readscreen(bbox, name = "tmp/DEBUG_screen.png", correct = False, invert = False):
