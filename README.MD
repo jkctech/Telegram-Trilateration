@@ -1,8 +1,8 @@
-# Abusing Telegram's "People Nearby" Feature
+# Telegram Triliteration
 
-A while back, Telegram rolled out a new feature which allows users to find people and groupchats close to their location. This opens up a big security risk for all people who enable it since most won't realize they can be traced using this method.
+A while back, Telegram rolled out a new feature which allows users to find people and groupchats close to their location. Because of poor implementation, this "feature" reports back with distances within 10 meters of accuracy. By using triliteration we are able to pinpoint someone's (near) exact location and thus... Stalk them.
 
-When this feature is enabled, you will see this popup on your screen which is not at all telling you about the ACTUAL risks.
+WHen enabled, you will see this popup on your screen which is giving you a general warning which probably won't alert much people.
 
 <img src="_assets/notification.jpg" width="50%">
 
@@ -12,9 +12,9 @@ The goal of this repository is to explore the possibilities and inform people ab
 
 ## Table of Contents
 * [Trilateration](#trilateration) (Finding someone's EXACT location)
+* [Scraping](#scraping) (Automating the triliteration)
 * [Public Groups](#public-groups)
 * [User Information](#user-information)
-<!-- * [Scraping](#scraping) (Automating scanning a whole area) -->
 
 ---
 
@@ -27,7 +27,16 @@ Using this technique, we can determine a user's whereabouts by taking multiple s
 This problem could be easily avoided by simply rounding the "Distance to X" field to whole kilometers instead of just 10 meters...
 
 <img src="_assets/trilateration.jpg" width="75%">
-<h5><a href="Trilateration/README.md">Read More ></a></h5>
+<h5><a href="Trilateration/">Read More ></a></h5>
+
+---
+
+### Scraping
+
+Locating someone by hand takes time (A few minutes) and effort (Clicking and typing). It will probably take you 20-ish minutes to track someone.
+So naturally, I spent weeks of effort into automating this system to save myself minutes of time...
+
+<h5><a href="Scraping/">Read More ></a></h5></a>
 
 ---
 
@@ -50,11 +59,3 @@ By finding someone, you can see their profile picture(s), bio and username. (Dep
 Being able to see someone's profile on a "search engine" is to be expected and key to it's functionality but being able to find people this way could open up a doorway for stalkers to find someone without them knowing their phonenumber or Telegram username.
 
 <img src="_assets/user.jpg" width="75%">
-
-<!-- ---
-
-### Scraping
-
-Locating a person takes 5-10 minutes on avarage when doing so by hand. This can theoretically be sped-up (Or at least be made less work) by automating these actions. Imagine moving your GPS location bit by bit over an entire city while collecting all Names, Usernames, Bio's, Pictures, Locations, Distances, Groups (and their Chats, Users and Media) on the go...
-
-<h5><a href="Scraping/README.md">Read More ></a> (Work in progress)</h5></a> -->
