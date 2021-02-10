@@ -2,3 +2,6 @@ __pycache__
 tmp
 notes
 results
+*.xlsx
+*.json
+test*
