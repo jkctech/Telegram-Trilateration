@@ -87,7 +87,7 @@ def exportDistancesJSON(raw, position, filename = "results/result.json"):
 		for item in itemlist:
 			result[types[i]].append({
 				"name": item[0],
-				"distance": item[1],
+				"circle_radius": item[1],
 				"color": usercolor(item[0]),
 			})
 	

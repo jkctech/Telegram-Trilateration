@@ -1,6 +1,6 @@
 import os
 import sys
-import xlsxwriter, openpyxl
+import openpyxl
 import datetime
 
 # We assume all files are in a correct format
