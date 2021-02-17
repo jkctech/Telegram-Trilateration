@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="nl">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Telegram Triliteration Interpreter</title>
+		<!-- Fonts and icons -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+		<!-- LeafletJS -->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="">
+		<!-- CSS -->
+		<style>
+			html, body {
+				font-family: 'Roboto', sans-serif;
+			}
+
+			html, body, .wrapper, .leafletmap {
+				margin: 0;
+				padding: 0;
+			}
+
+			html, body, .wrapper {
+				width: 100%;
+				height: 100%;
+			}
+
+			.leafletmap, .menu {
+				display: inline-block;
+			}
+
+			.leafletmap {
+				width: 80% !important;
+			}
+
+			.menu {
+				width: 20%;
+				height: 100%;
+				vertical-align: top;
+				float: right;
+				box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				-webkit-box-sizing: border-box;
+				border-style: solid;
+				border-width: 0px 0px 0px 1px;
+				border-color: #cacaca;
+			}
+
+			.logowrapper {
+				width: 100%;
+				padding: 10px 0;
+			}
+
+			.logo {
+				width: 50%;
+				display: block;
+				margin: auto;
+			}
+
+			.footer {
+				width: 19%;
+				text-align: center;
+				position: absolute;
+				bottom: 20px;
+				font-family: 'Roboto', sans-serif;
+				font-size: 0.8vw;
+			}
+
+			.btn {
+				border-radius:6px;
+				display:inline-block;
+				cursor:pointer;
+				font-family:Arial;
+				font-size:15px;
+				font-weight:bold;
+				padding:6px 24px;
+				text-decoration:none;
+				box-shadow: inset 0px 1px 0px 0px #ffffff;
+			}
+
+			.btn:active {
+				position:relative;
+				top:1px;
+			}
+
+			.btn-default {
+				background:linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%);
+				background-color:#f9f9f9;
+				border:1px solid #dcdcdc;
+				color:#666666;
+				text-shadow:0px 1px 0px #ffffff;
+			}
+
+			.btn-default:hover {
+				background:linear-gradient(to bottom, #e9e9e9 5%, #f9f9f9 100%);
+				background-color:#e9e9e9;
+			}
+
+			.controls {
+				padding: 10px;
+				text-align: center;
+			}
+
+			.fileblock {
+				padding: 10px;
+			}
+
+			.center {
+				margin-left: auto;
+				margin-right: auto;
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrapper">
+			<div id="map" class="leafletmap"></div>
+			<div class="menu" id="menu">
+				<div class="logowrapper">
+					<a href="https://jkctech.nl/">
+						<img src="https://jkctech.nl/cdn/logo/Logo_web.png" class="logo">
+					</a>
+				</div>
+				<div class="controls">
+					<button class="btn btn-default center" id="center"><i class="fas fa-crosshairs"></i> Center</button><br>
+					<button class="btn btn-default" id="allon"><i class="fas fa-eye"></i> Show All</button>
+					<button class="btn btn-default" id="alloff"><i class="fas fa-eye-slash"></i> Hide All</button>
+				</div>
+				<hr>
+				<div class="fileblock">
+					<span>Load JSON file:</span>
+					<input type="file" id="fileinput"><input type='button' value='Load' onclick="handleFile()">
+				</div>
+				
+				<div class="footer">
+					Copyright &copy; <a href="https://jkctech.nl/" target="_blank">JKCTech</a> <script>document.write(new Date().getFullYear())</script>
+				</div>
+			</div>
+		</div>
+	</body>
+		
+	<!-- Endscripts -->
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+	<!-- LeafletJS -->
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js" integrity="sha512-Abr21JO2YqcJ03XGZRPuZSWKBhJpUAR6+2wH5zBeO4wAw4oksr8PRdF+BKIRsxvCdq+Mv4670rZ+dLnIyabbGw==" crossorigin="anonymous"></script>
+	<script>
+		var map;
+		var center = [52.222752, 5.42724];
+		var baseurl = "https://112centraal.nl/";
+		// This key is generated specifically for this, and will be redacted when abused :)
+		var mb_key = "pk.eyJ1IjoiamtjdGVjaCIsImEiOiJja2w5OG1iaXEwam9wMm5sYmRjbWkwcWN3In0.k_SXEQq00SIetmYaNO3QPw";
+		var map_url = "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=" + mb_key;
+		var map_attr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+
+		// Default icon per user
+		var default_icon = L.icon({
+			iconUrl: 'assets/default.png',
+			iconSize: [32, 40],
+			iconAnchor: [16, 40],
+			popupAnchor: [0, -32]
+		});
+
+		// Generate circle with popup and center marker
+		function getCircle(lat, lon, circle_radius, color)
+		{
+			var circle = L.circle([lat, lon], {
+				color: color,
+				fillColor: color,
+				fillOpacity: 0.2,
+				radius: circle_radius
+			}).bindPopup(
+				"<strong>Lat:</strong> " + lat + "<br>" +
+				"<strong>Lon:</strong> " + lon + "<br>" +
+				"<strong>Radius:</strong> " + circle_radius + " m"
+			);
+			var marker = L.circle([lat, lon], {
+				color: color,
+				fillColor: color,
+				fillOpacity: 1,
+				radius: 20
+			});
+			return [circle, marker];
+		}
+
+		// Generate a layer with all elements of a user
+		function getUserLayer(circles, location, color, name, type)
+		{
+			var items = [];
+			circles.forEach(function(circle, index){
+				var c = getCircle(circle['lat'], circle['lon'], circle['circle_radius'], color);
+				items.push(c[0]);
+				items.push(c[1]);
+			});
+			items.push(L.marker(location, {icon: default_icon}).bindPopup("<strong>[" + type.toUpperCase() + "]</strong></br>" + name));
+			var layer = L.layerGroup(items);
+			return layer;
+		}
+
+		// Base background layer
+		var map_base = L.tileLayer(map_url, {id: 'mapbox/light-v9', tileSize: 512, zoomOffset: -1, attribution: map_attr});
+
+		// Map initialization
+		map = L.map('map', {
+			center: center,
+			zoom: 8,
+			layers: [map_base]
+		});
+
+		// Build all user layers
+		var userlayers = {};
+		// {{USERLAYERS}}
+		userlayers["[U] Example User"] = getUserLayer(
+			[
+				{
+					"lat":52.955692,
+					"lon":4.7921037,
+					"circle_radius":3050
+				},
+				{
+					"lat":52.91534,
+					"lon":4.7938199,
+					"circle_radius":5180
+				},
+				{
+					"lat":52.916168,
+					"lon":4.7145118,
+					"circle_radius":4570
+				}
+			],
+			[
+				52.95235588667972,
+				4.746870440437641
+			],
+			"#fa270f",
+			"Example User",
+			"User"
+		).addTo(map);
+		// {{USERLAYERS_END}}
+
+		// Background layers
+		var bglayers = {
+			"Grayscale": map_base,
+			"Streets": L.tileLayer(map_url, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: map_attr})
+		};
+
+		// Add background and user layers
+		L.control.layers(bglayers, userlayers, {collapsed:false, sortLayers:true}).addTo(map);
+
+		// Responsiveness
+		$(window).on("resize", function () {
+			$("#map").height($(window).height());
+			$("#map").width($(window).width());
+			map.invalidateSize();
+		}).trigger("resize");
+
+		// ===== Button controls =====
+
+		// Move back to center
+		$("#center").click(function() {
+			map.setView(center, 8);
+		});
+
+		// Enable all layers
+		$("#allon").click(function() {
+			for (var layer in userlayers)
+				map.addLayer(userlayers[layer]);
+		});
+
+		// Disable all layers
+		$("#alloff").click(function() {
+			for (var layer in userlayers)
+				map.removeLayer(userlayers[layer]);
+		});
+	</script>
+</html>
