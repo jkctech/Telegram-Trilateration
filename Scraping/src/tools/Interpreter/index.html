@@ -13,6 +13,8 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<title>Telegram Trilateration Interpreter</title>
 		<!-- Fonts and icons -->
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
 		<!-- LeafletJS -->
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="">
@@ -122,6 +124,7 @@
 				display: block;
 				text-align: center;
 				margin-bottom: 5px;
+				font-weight: bold;
 			}
 
 			#fileblock, #settingsblock {
@@ -150,6 +153,16 @@
 				color: #b3b3b3;
 				font-size: 11px;
 				margin-left: 24px;
+			}
+
+			p {
+				font-weight: 400;
+				font-size: 12px;
+			}
+
+			a {
+				color: black;
+				font-weight: bold;
 			}
 		</style>
 	</head>
@@ -183,7 +196,7 @@
 				<div id="settingsblock" class="menublock" style="padding-bottom:0;">
 					<span class="blocktitle">Settings</span>
 					<div class="formblock">
-						<input type="checkbox" id="drawcircles" checked> <label>Draw Circles</label>
+						<input type="checkbox" id="drawcircles"> <label>Draw Circles</label>
 					</div>
 					<div class="formblock">
 						<input type="checkbox" id="drawmarkers" checked> <label>Draw Markers</label>
@@ -195,6 +208,18 @@
 					<div class="formblock" style="display:inline-block;width:100%">
 						<button onclick="applySettings()" class="btn btn-default" style="float:right"><i class="fas fa-check-circle"></i> Apply</button>
 					</div>
+				</div>
+				<hr>
+				<!-- Info -->
+				<div id="fileblock" class="menublock">
+					<span class="blocktitle">Information</span>
+
+					<p>
+						This page is part of the <strong>"Telegram Trilateration"</strong> project.<br>
+						<a href="https://github.com/jkctech/Telegram-Trilateration" target="_blank">Visit the repository here</a><br>
+						<br>
+						I cannot be held responsible for the usage of this interpreter by anyone. Use at your own risk and discretion!
+					</p>
 				</div>
 				<hr>
 				<div class="footer">
@@ -219,10 +244,11 @@
 		var center = [52.222752, 5.42724];
 		var userlayers = {};
 		var jsonraw = {};
+		var allfeatures = [];
 		var fr;
 
 		// Values of user settings
-		var set_circles = true;
+		var set_circles = false;
 		var set_markers = true;
 		var set_unresolvable = false;
 
@@ -305,9 +331,7 @@
 		// ===== Button controls & Eventhandlers =====
 
 		// Move back to center
-		$("#center").click(function() {
-			map.setView(center, 8);
-		});
+		$("#center").click(centerScreen);
 
 		// Enable all layers
 		$("#allon").click(function() {
@@ -378,6 +402,8 @@
 			var data = jQuery.parseJSON(fr.result);
 			jsonraw = data;
 
+			readSettings();
+
 			// Loop over entries
 			for (var name in data)
 			{
@@ -410,6 +436,11 @@
 					display = '<span style="color:orange">' + display + '</span>';
 				}
 
+				// Add to global list of elements so we can center properly
+				allfeatures = allfeatures.concat(layer['markers']);
+
+				userlayers[name].addTo(map);
+
 				// Append layer
 				layercontrol.addOverlay(layer['layer'], display);
 			}
@@ -417,15 +448,23 @@
 			// Reset inputfile
 			$("#fileinput").val("");
 			$("#filepath").html("Please select a file.");
+
+			// Move screen
+			centerScreen();
+		}
+
+		function readSettings()
+		{
+			set_circles = $("#drawcircles").is(":checked");
+			set_markers = $("#drawmarkers").is(":checked");
+			set_unresolvable = $("#unresolvable").is(":checked");
 		}
 
 		// Apply settings (Duh)
 		function applySettings()
 		{
-			set_circles = $("#drawcircles").is(":checked");
-			set_markers = $("#drawmarkers").is(":checked");
-			set_unresolvable = $("#unresolvable").is(":checked");
-			
+			readSettings();
+
 			// Redraw all layers (Actually apply settings)
 			for (var name in userlayers)
 			{
@@ -463,6 +502,9 @@
 					display = '<span style="color:orange">' + display + '</span>';
 				}
 
+				// Add to global list of elements so we can center properly
+				allfeatures = allfeatures.concat(layer['markers']);
+
 				// Append layer
 				layercontrol.addOverlay(layer['layer'], display);
 
@@ -470,6 +512,19 @@
 				if (enabled)
 					userlayers[name].addTo(map);
 			}
+		}
+
+		function centerScreen()
+		{
+			if (allfeatures.length > 0)
+			{
+				var group = L.featureGroup(allfeatures);
+				var bounds = group.getBounds();
+
+				map.fitBounds(bounds);
+			}
+			else
+				map.setView(center, 8);
 		}
 	</script>
 </html>
