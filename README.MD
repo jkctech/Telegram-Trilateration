@@ -1,6 +1,6 @@
-# Telegram Triliteration
+# Telegram Trilateration
 
-A while back, Telegram rolled out a new feature which allows users to find people and groupchats close to their location. Because of poor implementation, this "feature" reports back with distances within 10 meters of accuracy. By using triliteration we are able to pinpoint someone's (near) exact location and thus... Stalk them.
+A while back, Telegram rolled out a new feature which allows users to find people and groupchats close to their location. Because of poor implementation, this "feature" reports back with distances within 10 meters of accuracy. By using trilateration we are able to pinpoint someone's (near) exact location and thus... Stalk them.
 
 WHen enabled, you will see this popup on your screen which is giving you a general warning which probably won't alert much people.
 
@@ -12,7 +12,7 @@ The goal of this repository is to explore the possibilities and inform people ab
 
 ## Table of Contents
 * [Trilateration](#trilateration) (Finding someone's EXACT location)
-* [Scraping](#scraping) (Automating the triliteration)
+* [Scraping](#scraping) (Automating the trilateration)
 * [Public Groups](#public-groups)
 * [User Information](#user-information)
 

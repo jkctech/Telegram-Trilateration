@@ -37,7 +37,7 @@ points['move'] = (568, 602) # Location of the 'Move Here' button (RELATIVE)
 points['close'] = (682, 16) # Location of the close button (RELATIVE)
 
 
-# Location coordinates for triliteration
+# Location coordinates for trilateration
 coords = {
 	"a": (52.929502, 4.8012571),
 	"b": (52.965476, 4.7217422),

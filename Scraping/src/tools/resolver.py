@@ -4,7 +4,7 @@ import openpyxl
 import json
 
 sys.path.append('..')
-from utils import triliterate
+from utils import trilaterate
 
 # We assume all files are in a correct format
 # No validation will happen here
@@ -43,12 +43,12 @@ def resolve(file, outfile = None):
 			"circle_radius": circle_radius
 		})
 
-	# Loop over everyone again and perform triliteration
+	# Loop over everyone again and perform trilateration
 	for key in items.keys():
 		points = []
 		for c in items[key]['circles']:
 			points.append((c['lat'], c['lon'], c['circle_radius']))
-		items[key]['location'] = triliterate.triliterate_multi(points)
+		items[key]['location'] = trilaterate.trilaterate_multi(points)
 	
 	# Dump to file
 	with open(outfile, 'w') as f:

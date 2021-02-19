@@ -7,12 +7,12 @@ import itertools
 # This way we can use try/catch blocks to just return False instead of (NaN, NaN)
 numpy.seterr(all="raise")
 
-# Function for triliteration
+# Function for trilateration
 # This function is based (Or copied technically) on this post:
 # - https://gis.stackexchange.com/questions/66/trilateration-using-3-latitude-longitude-points-and-3-distances/415
 # HOWEVER: It seems this function can generate different outputs based on the order of input variables...
 # We "solve" this issue down below in a dirty way because I don't understand math that well
-def triliterate(raw):
+def trilaterate(raw):
 	# Only allow 3 coords
 	if len(raw) != 3:
 		return False
@@ -84,14 +84,14 @@ def triliterate(raw):
 # We generate ALL POSSIBLE ways of ordering our input coordinates...
 # We store the calculated lat / lon values and later get the avarages
 # This actually solves the above mentioned problem.
-def triliterate_correct(raw):
+def trilaterate_correct(raw):
 	# We will store calculated values here
 	lats = []
 	lons = []
 
 	# Loop over ALL COMBINATIONS of these coords....
 	for item in itertools.permutations(raw):
-		res = triliterate(item)
+		res = trilaterate(item)
 		if res == False:
 			return False
 		lats.append(res[0])
@@ -103,13 +103,13 @@ def triliterate_correct(raw):
 
 	return (lat, lon)
 
-# If we have more than 3 points, normal triliteration will not work.
+# If we have more than 3 points, normal trilateration will not work.
 # We will make all combinations of these coords.
-# Usage of permutations() is not needed since that will be handled by triliterate_correct().
-def triliterate_multi(raw):
+# Usage of permutations() is not needed since that will be handled by trilaterate_correct().
+def trilaterate_multi(raw):
 	# If we only have 3 items, just use normal trilat
 	if len(raw) <= 3:
-		return triliterate_correct(raw)
+		return trilaterate_correct(raw)
 
 	# We will store calculated values here
 	lats = []
@@ -120,7 +120,7 @@ def triliterate_multi(raw):
 
 	# Loop over these coords....
 	for item in groups:
-		res = triliterate_correct(item)
+		res = trilaterate_correct(item)
 		if res == False:
 			return False
 		lats.append(res[0])
@@ -147,8 +147,8 @@ if __name__ == '__main__':
 	for i in raw:
 		print("{}\t{}\t[{} m distance]".format(i[0], i[1], i[2]))
 
-	# Execute triliteration
-	res = triliterate_multi(raw)
+	# Execute trilateration
+	res = trilaterate_multi(raw)
 
 	# Print, but with rounding to 7th digit.
 	print("\nResult:")
