@@ -1,0 +1,475 @@
+<!--
+	Telegram Trilateration Interpreter
+
+	By: JKCTech
+	URL: https://github.com/jkctech/Telegram-Trilateration
+
+	This interpreter is part of the "Telegram Trilateration" project.
+-->
+<!DOCTYPE html>
+<html lang="nl">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>Telegram Trilateration Interpreter</title>
+		<!-- Fonts and icons -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+		<!-- LeafletJS -->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="">
+		<!-- CSS -->
+		<style>
+			html, body {
+				font-family: 'Roboto', sans-serif;
+			}
+
+			html, body, .wrapper, .leafletmap {
+				margin: 0;
+				padding: 0;
+			}
+
+			html, body, .wrapper {
+				width: 100%;
+				height: 100%;
+			}
+
+			.leafletmap, .menu {
+				display: inline-block;
+			}
+
+			.leafletmap {
+				width: 80% !important;
+			}
+
+			.menu {
+				width: 20%;
+				height: 100%;
+				vertical-align: top;
+				float: right;
+				box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				-webkit-box-sizing: border-box;
+				border-style: solid;
+				border-width: 0px 0px 0px 1px;
+				border-color: #cacaca;
+			}
+
+			.logowrapper {
+				width: 100%;
+				padding: 10px 0;
+			}
+
+			.logo {
+				width: 50%;
+				display: block;
+				margin: auto;
+			}
+
+			.footer {
+				width: 19%;
+				text-align: center;
+				position: absolute;
+				bottom: 20px;
+				font-family: 'Roboto', sans-serif;
+				font-size: 0.8vw;
+			}
+
+			.btn {
+				border-radius: 6px;
+				display: inline-block;
+				cursor: pointer;
+				font-family: Arial;
+				font-size: 15px;
+				font-weight: bold;
+				padding: 6px 24px;
+				text-decoration: none;
+				box-shadow: inset 0px 1px 0px 0px #ffffff;
+			}
+
+			.btn-control {
+				background: linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%);
+				background-color: #f9f9f9;
+				border: 1px solid #dcdcdc;
+				color: #666666;
+				text-shadow: 0px 1px 0px #ffffff;
+				font-size: 12px;
+				padding: 5px 20px;
+			}
+
+			.btn:active {
+				position: relative;
+				top: 1px;
+			}
+
+			.btn-default {
+				background: linear-gradient(to bottom, #f9f9f9 5%, #e9e9e9 100%);
+				background-color: #f9f9f9;
+				border: 1px solid #dcdcdc;
+				color: #666666;
+				text-shadow: 0px 1px 0px #ffffff;
+			}
+
+			.btn-default:hover {
+				background:linear-gradient(to bottom, #e9e9e9 5%, #f9f9f9 100%);
+				background-color:#e9e9e9;
+			}
+
+			.menublock {
+				padding: 10px;
+				text-align: center;
+			}
+
+			.blocktitle {
+				display: block;
+				text-align: center;
+				margin-bottom: 5px;
+			}
+
+			#fileblock, #settingsblock {
+				text-align: left;
+			}
+
+			.center {
+				margin-left: auto;
+				margin-right: auto;
+				display: block;
+			}
+
+			.clearfix::after { 
+				content: " ";
+				display: block; 
+				height: 0; 
+				clear: both;
+			}
+
+			small {
+				display: block;
+				margin-bottom: 5px;
+			}
+
+			.muted {
+				color: #b3b3b3;
+				font-size: 11px;
+				margin-left: 24px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrapper">
+			<div id="map" class="leafletmap"></div>
+			<div class="menu" id="menu">
+				<div class="logowrapper">
+					<a href="https://jkctech.nl/">
+						<img src="https://jkctech.nl/cdn/logo/Logo_web.png" class="logo">
+					</a>
+				</div>
+				<!-- Controls -->
+				<div id="controlblock" class="menublock">
+					<button class="btn btn-default center" id="center"><i class="fas fa-crosshairs"></i> Center</button><br>
+					<button class="btn btn-default" id="allon"><i class="fas fa-eye"></i> Show All</button>
+					<button class="btn btn-default" id="alloff"><i class="fas fa-eye-slash"></i> Hide All</button>
+				</div>
+				<hr>
+				<!-- Load file -->
+				<div id="fileblock" class="menublock">
+					<span class="blocktitle">Load JSON File</span>
+
+					<label for="fileinput" class="btn btn-control"><i class="fas fa-folder-open"></i> Select File</label>
+					<input type="file" id="fileinput" style="display:none;">
+					<button class="btn btn-control" onclick="handleFile()"><i class="fas fa-upload"></i> Load</button>
+					<small id="filepath">Please select a file.</small>
+				</div>
+				<hr>
+				<!-- User settings -->
+				<div id="settingsblock" class="menublock" style="padding-bottom:0;">
+					<span class="blocktitle">Settings</span>
+					<div class="formblock">
+						<input type="checkbox" id="drawcircles" checked> <label>Draw Circles</label>
+					</div>
+					<div class="formblock">
+						<input type="checkbox" id="drawmarkers" checked> <label>Draw Markers</label>
+					</div>
+					<div class="formblock">
+						<input type="checkbox" id="unresolvable"> <label>Show Unresolvable Users</label>
+						<small class="muted">Show users who cannot be trilaterated in <span style="color: orange">orange</span>.</small>
+					</div>
+					<div class="formblock" style="display:inline-block;width:100%">
+						<button onclick="applySettings()" class="btn btn-default" style="float:right"><i class="fas fa-check-circle"></i> Apply</button>
+					</div>
+				</div>
+				<hr>
+				<div class="footer">
+					Copyright &copy; <a href="https://jkctech.nl/" target="_blank">JKCTech</a> <script>document.write(new Date().getFullYear())</script>
+				</div>
+			</div>
+		</div>
+	</body>	
+	<!-- Endscripts -->
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+	<!-- LeafletJS -->
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js" integrity="sha512-Abr21JO2YqcJ03XGZRPuZSWKBhJpUAR6+2wH5zBeO4wAw4oksr8PRdF+BKIRsxvCdq+Mv4670rZ+dLnIyabbGw==" crossorigin="anonymous"></script>
+	<script>
+		const baseurl = "https://112centraal.nl/";
+		const mb_key = "pk.eyJ1IjoiamtjdGVjaCIsImEiOiJja2w5OG1iaXEwam9wMm5sYmRjbWkwcWN3In0.k_SXEQq00SIetmYaNO3QPw";
+		const map_url = "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=" + mb_key;
+		const map_attr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+
+		// Global variables
+		var map;
+		var center = [52.222752, 5.42724];
+		var userlayers = {};
+		var jsonraw = {};
+		var fr;
+
+		// Values of user settings
+		var set_circles = true;
+		var set_markers = true;
+		var set_unresolvable = false;
+
+		// ===== Map Elements =====
+
+		// Default icon per user
+		var default_icon = L.icon({
+			iconUrl: 'assets/default.png',
+			iconSize: [32, 40],
+			iconAnchor: [16, 40],
+			popupAnchor: [0, -32]
+		});
+
+		// Generate circle with popup and center marker
+		function getCircle(lat, lon, circle_radius, color)
+		{
+			var circle = L.circle([lat, lon], {
+				color: color,
+				fillColor: color,
+				fillOpacity: 0.2,
+				radius: circle_radius
+			}).bindPopup(
+				"<strong>Lat:</strong> " + lat + "<br>" +
+				"<strong>Lon:</strong> " + lon + "<br>" +
+				"<strong>Radius:</strong> " + circle_radius + " m"
+			);
+			var marker = L.circle([lat, lon], {
+				color: color,
+				fillColor: color,
+				fillOpacity: 1,
+				radius: 20
+			});
+			return [circle, marker];
+		}
+
+		// Generate a layer with all elements of a user
+		function getUserLayer(circles, location, color, name, type)
+		{
+			var clist = [];
+			var mlist = [];
+
+			if (set_circles)
+				circles.forEach(function(circle, index){
+					var c = getCircle(circle['lat'], circle['lon'], circle['circle_radius'], color);
+					clist.push(c[0]);
+					clist.push(c[1]);
+				});
+
+			if (set_markers && location != false)
+				mlist.push(L.marker(location, {icon: default_icon}).bindPopup("<strong>[" + type.toUpperCase() + "]</strong></br>" + name));
+		
+			var layer = L.layerGroup(clist.concat(mlist));
+			
+			return {
+				"layer": layer,
+				"circles": clist,
+				"markers": mlist,
+			};
+		}
+
+		// Base background layer
+		var map_base = L.tileLayer(map_url, {id: 'mapbox/light-v9', tileSize: 512, zoomOffset: -1, attribution: map_attr});
+
+		// Map initialization
+		map = L.map('map', {
+			center: center,
+			zoom: 8,
+			layers: [map_base]
+		});
+
+		// Background layers
+		var bglayers = {
+			"Grayscale": map_base,
+			"Streets": L.tileLayer(map_url, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: map_attr})
+		};
+
+		// Add background and user layers
+		var layercontrol = L.control.layers(bglayers, [], {collapsed:false,sortLayers:true}).addTo(map);
+
+		// ===== Button controls & Eventhandlers =====
+
+		// Move back to center
+		$("#center").click(function() {
+			map.setView(center, 8);
+		});
+
+		// Enable all layers
+		$("#allon").click(function() {
+			for (var layer in userlayers)
+				map.addLayer(userlayers[layer]);
+		});
+
+		// Disable all layers
+		$("#alloff").click(function() {
+			for (var layer in userlayers)
+				map.removeLayer(userlayers[layer]);
+		});
+
+		// Update filename for custom file selector
+		$('#fileinput').change(function() {
+			var input = document.getElementById('fileinput');
+			if (!input.files)
+			{
+				alert("This browser does not support the 'files' property of file inputs.");
+				return;
+			}
+			$("#filepath").html(input.files[0].name);
+		});
+
+		// Responsiveness
+		$(window).on("resize", function () {
+			$("#map").height($(window).height());
+			$("#map").width($(window).width());
+			map.invalidateSize();
+		}).trigger("resize");
+
+		// ===== Data handling =====
+
+		// Handle the "Upload" of a new file
+		function handleFile()
+		{
+			// Check if supported
+			if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
+				alert('File API not fully supported in this browser.');
+				return;
+			}   
+			
+			var input = document.getElementById('fileinput');
+			
+			// Check supported
+			if (!input.files)
+			{
+				alert("This browser does not support the 'files' property of file inputs.");
+				return;
+			}
+
+			// Check if file given
+			if (!input.files[0])
+			{
+				alert("Please select a file first.");
+				return;
+			}
+			
+			// Link file to FileReader
+			fr = new FileReader();
+			fr.onload = drawdata;
+			fr.readAsText(input.files[0]);
+		}
+
+		// Draw data based off object data
+		function drawdata()
+		{
+			var data = jQuery.parseJSON(fr.result);
+			jsonraw = data;
+
+			// Loop over entries
+			for (var name in data)
+			{
+				// Ignore existing names
+				if (name in userlayers)
+					continue;
+
+				var item = data[name];
+				var display = "[" + item.type.toUpperCase().charAt(0) + "] " + name;
+
+				var layer = getUserLayer(
+					item.circles,
+					item.location,
+					item.color,
+					name,
+					item.type
+				);
+
+				// Save
+				userlayers[name] = layer['layer'];
+
+				// For incomplete users
+				if (layer['markers'].length == 0)
+				{
+					// Skip if needed
+					if (!set_unresolvable)
+						continue;
+					
+					// Apply styling
+					display = '<span style="color:orange">' + display + '</span>';
+				}
+
+				// Append layer
+				layercontrol.addOverlay(layer['layer'], display);
+			}
+
+			// Reset inputfile
+			$("#fileinput").val("");
+			$("#filepath").html("Please select a file.");
+		}
+
+		// Apply settings (Duh)
+		function applySettings()
+		{
+			set_circles = $("#drawcircles").is(":checked");
+			set_markers = $("#drawmarkers").is(":checked");
+			set_unresolvable = $("#unresolvable").is(":checked");
+			
+			// Redraw all layers (Actually apply settings)
+			for (var name in userlayers)
+			{
+				// Save state
+				var enabled = map.hasLayer(userlayers[name]);
+
+				// Delete layer
+				userlayers[name].remove();
+				layercontrol.removeLayer(userlayers[name]);
+
+				// Prepare new layer names
+				var item = jsonraw[name];
+				var display = "[" + item.type.toUpperCase().charAt(0) + "] " + name;
+
+				// Build new layer (With settings)
+				var layer = getUserLayer(
+					item.circles,
+					item.location,
+					item.color,
+					name,
+					item.type
+				);
+
+				// Save
+				userlayers[name] = layer['layer'];
+
+				// For incomplete users
+				if (layer['markers'].length == 0)
+				{
+					// Skip if needed
+					if (!set_unresolvable)
+						continue;
+					
+					// Apply styling
+					display = '<span style="color:orange">' + display + '</span>';
+				}
+
+				// Append layer
+				layercontrol.addOverlay(layer['layer'], display);
+
+				// Restore state
+				if (enabled)
+					userlayers[name].addTo(map);
+			}
+		}
+	</script>
+</html>
