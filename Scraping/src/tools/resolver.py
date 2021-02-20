@@ -6,6 +6,10 @@ import json
 sys.path.append('..')
 from utils import trilaterate
 
+# By default remove people who are not trilateratable.
+# Will be changed by args later
+save_incomplete = False
+
 # We assume all files are in a correct format
 # No validation will happen here
 def resolve(file, outfile = None):
@@ -44,7 +48,12 @@ def resolve(file, outfile = None):
 		})
 
 	# Loop over everyone again and perform trilateration
-	for key in items.keys():
+	for key in list(items.keys()):
+		if (len(key.strip()) == 0):
+			continue
+		if (save_incomplete == False and len(items[key]['circles']) < 3):
+			del items[key]
+			continue
 		points = []
 		for c in items[key]['circles']:
 			points.append((c['lat'], c['lon'], c['circle_radius']))
