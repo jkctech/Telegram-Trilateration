@@ -211,14 +211,24 @@
 				</div>
 				<hr>
 				<!-- Info -->
-				<div id="fileblock" class="menublock">
+				<div id="infoblock" class="menublock">
 					<span class="blocktitle">Information</span>
 
-					<p>
+					<!-- I Should have done this properly, but frankly, I don't care for that right now -->
+					<p style="text-align:left">
 						This page is part of the <strong>"Telegram Trilateration"</strong> project.<br>
 						<a href="https://github.com/jkctech/Telegram-Trilateration" target="_blank">Visit the repository here</a><br>
 						<br>
-						I cannot be held responsible for the usage of this interpreter by anyone. Use at your own risk and discretion!
+						I cannot be held responsible for the usage of this interpreter by anyone. Use at your own risk and discretion!<br>
+						<br>
+						* Marker locations are estimated by using trilateration. These are for quick general interpretation and are less accurate than visual inspection.<br>
+						<br>
+						* Uploading multiple JSON files is possible but may collide when users or groups have the same name.<br>
+						<br>
+						<strong>Layer Legend</strong><br>
+						[U] John Doe <i class="fas fa-arrow-right"></i> User<br>
+						[G] Family Feud <i class="fas fa-arrow-right"></i> Group<br>
+						<span style="color:orange">[U] John Doe</span> <i class="fas fa-arrow-right"></i> Not enough data to trilaterate<br>
 					</p>
 				</div>
 				<hr>
