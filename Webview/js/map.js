@@ -41,29 +41,55 @@ function getUserLayer(circles, location, color, name, type)
 	var clist = [];
 	var mlist = [];
 
-	if (set_circles)
-		circles.forEach(function(circle, index){
-			var c = getCircle(circle['lat'], circle['lon'], circle['circle_radius'], color);
-			clist.push(c[0]);
-			clist.push(c[1]);
-		});
+	circles.forEach(function(circle, index){
+		var c = getCircle(circle['lat'], circle['lon'], circle['circle_radius'], color);
+		clist.push(c[0]);
+		clist.push(c[1]);
+	});
 
 	if (set_markers && location != false)
 	{
+		// Assign proper icon
 		if (type == "User")
 			var icon = icon_user;
 		else
 			var icon = icon_group;
-		mlist.push(L.marker(location, {icon: icon}).bindPopup("<strong>[" + type.toUpperCase() + "]</strong></br>" + name));
+		marker = L.marker(location, {icon: icon});
+
+		// Popup (Prevent auto close)
+		var popup = L.popup({closeOnClick: false, autoClose: false});
+		popup.setContent("<strong>[" + type.toUpperCase() + "]</strong></br>" + name);
+		marker.bindPopup(popup);
+		
+		// Open circles on click of popup
+		marker.on('popupopen', function(){
+			clist.forEach(function(c, index){
+				c.addTo(map);
+			});
+		});
+		
+		// Close all circles on close of popup
+		marker.on('popupclose', function(){
+			clist.forEach(function(c, index){
+				c.remove();
+			});
+		});
+		
+		mlist.push(marker);
 	}
 
-	var layer = L.layerGroup(clist.concat(mlist));
+	if (set_circles)
+		var layer = L.layerGroup(clist.concat(mlist));
+	else
+		var layer = L.layerGroup(mlist);
 	
-	return {
+	var result = {
 		"layer": layer,
-		"circles": clist,
+		"circles": set_circles ? clist : [],
 		"markers": mlist,
 	};
+
+	return result;
 }
 
 // Base background layer
