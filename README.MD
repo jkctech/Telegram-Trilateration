@@ -26,7 +26,7 @@ A great example of why this new feature is a problem is trilateration.
 Using this technique, we can determine a user's whereabouts by taking multiple samples of locations and distances relative to our own location.
 (We will use GPS spoofing for this)
 
-This problem could be easily avoided by simply rounding the "Distance to X" field to whole kilometers instead of just 10 meters...
+**This problem could be easily avoided by simply rounding the "Distance to X" to whole kilometers instead of just 10 meters...**
 
 <img src="_assets/trilateration.jpg" width="75%">
 <h5><a href="Trilateration/">Read More ></a></h5>
@@ -45,7 +45,8 @@ So naturally, I spent weeks of effort into automating this system to save myself
 
 ### Webview
 
-Gathering the data through scraping is fun and all, but actually being able to interpret it is better. **(And I took this way too far, please don't ever be like me)**
+Gathering the data through scraping is fun and all, but actually being able to interpret it is better.
+**(I took this way too far, please don't ever be like me)**
 
 <img src="_assets/webview.jpg" width="75%">
 

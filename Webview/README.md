@@ -12,7 +12,7 @@ This would not be a project of mine without an unnecessary webtool. This part of
 
 ### Preprocessing
 To show your collected data in the webview, follow these steps:
-1. Collect enough data so trilateration can commence. (<a href="/Scraping/">Read More</a>)
+1. Collect enough data using the Scraper so trilateration can commence. (<a href="/Scraping/">Read More</a>)
 1. Drag all your `.xlsx` files onto `combine.py` located in `/Scraping/src/tools`
 1. A new `.xlsx` file will generate in the `tools` folder. Drag this file on top of `resolver.py`
 1. A new `.json` file will generate. This is the file we will load into the webviewer
@@ -51,4 +51,5 @@ The map is also controlled by mouse scrolling (Zooming) and dragging (Panning). 
 
 
 ![](https://via.placeholder.com/15/00FF21/000000?text=+) **Information**
+
 Contains general information about the webpanel and a legend for reference.
