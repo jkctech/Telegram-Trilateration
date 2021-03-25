@@ -1,6 +1,7 @@
 # Webview
 
-This would not be a project of mine without an unnecessary webtool. This part of the project converts the raw data from the scraper into an interactive map.
+This would not be a project of mine without an unnecessary webtool.\
+This part of the project converts the raw data from the scraper into an interactive map.
 
 ---
 

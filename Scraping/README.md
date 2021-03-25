@@ -1,6 +1,6 @@
 # Scraping
 
-By abusing NOX's GPS spoofing and doing some keyboard, mouse and OCR magic, we can automate tracing users.
+By abusing NOX's GPS spoofing and doing some keyboard, mouse and OCR magic, we can automate tracing users.\
 Because who has time for doing this by hand?
 
 ---
@@ -30,9 +30,9 @@ Because who has time for doing this by hand?
 	- Doing more scans will not always increase the accuracy of resulted data. Limit your scans to about 5 to prevent calculcations from going all over the place.
 1. Process the data according to the [Subtools](#subtools)
 
-**Warning!**
-Doing keyboard / mouse emulation can seriously mess-up your system if things go wrong.
-**I AM NOT ACCOUNTABLE FOR ANY DAMAGE OR ILLEGAL ACTIVITY DONE BY END USERS! USE AT YOUR OWN RISK AND DISCRETION!**
+**Warning!**\
+Doing keyboard / mouse emulation can seriously mess-up your system if things go wrong.\
+**I AM NOT ACCOUNTABLE FOR ANY DAMAGE OR ILLEGAL ACTIVITY DONE BY END USERS! USE AT YOUR OWN RISK AND DISCRETION!**\
 To abort the scraper, quickly move your mouse to the Top-Left of your screen to trigger the failsafe!
 
 ---

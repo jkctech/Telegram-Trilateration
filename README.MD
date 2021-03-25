@@ -22,8 +22,7 @@ The goal of this repository is to build a proof of concept for mass exploiting t
 * [Trilateration](#trilateration) (Finding someone's EXACT location)
 * [Scraping](#scraping) (Automating the trilateration)
 * [Webview](#webview) (Using the scraped data)
-* [Public Groups](#public-groups)
-* [User Information](#user-information)
+* [Groups and User Information](#groups-and-user-information)
 
 ---
 
@@ -53,7 +52,7 @@ So naturally, I spent weeks of effort into automating this system to save myself
 
 ### Webview
 
-Gathering the data through scraping is fun and all, but actually being able to interpret it is better.
+Gathering the data through scraping is fun and all, but actually being able to interpret it is better.\
 **(I took this way too far, please don't ever be like me)**
 
 <img src="_assets/webview.jpg" width="75%">
@@ -62,21 +61,20 @@ Gathering the data through scraping is fun and all, but actually being able to i
 
 ---
 
-### Public Groups
-Other than users, groupchats can also be indexed by location. You have to create a group specifically for this purpose. The creator of the group probably realizes everyone can read along with the chats, but some of the people who join by invite for example won't.
+### Other Concerns
+
+Other than users, groupchats can also be indexed by location. You have to create a group specifically for this purpose so the creator of the group probably realizes everyone can read along with the chats, but some of the people who join by invite for example won't.
 
 The chats are shown to people who click on the group, even if they don't actually join. The groups are free to join by anyone so even blocking this won't suffice, but at least you KNOW that someone has read the chat.
 
 Using this, it's not hard to find groups where people sell illegal goods / services or find private information.
 
+"*Anyone who wants to buy some good weed?*"
 <img src="_assets/groups.jpg" width="75%">
 
----
+On another note, finding user information on Telegram is not difficult and it's expected that people see your profile. Regardless of using the "Nearby" function or just username searching. The problem here is by using location search you gain much more information in the sense of knowing that persons general whereabouts and thus are able to find a specific person more easily.
 
-### User Information
-In general, finding user information on Telegram is not difficult and it's expected that people see your profile, regardless of using the "Nearby" function or just username searching. The problem here is by using location search you gain much more information in the sense of knowing that persons general whereabouts and thus are able to find a specific person more easily.
-
-By finding someone, you can see their profile picture(s), bio and username. (Depending on their privacy settings)
+By finding someone, you can see their profile picture(s), bio and username. *(Depending on their privacy settings)*
 
 Being able to see someone's profile on a "search engine" is to be expected and key to it's functionality but being able to find people this way could open up a doorway for stalkers to find someone or just lurk for random people without them knowing their phonenumber or Telegram username.
 

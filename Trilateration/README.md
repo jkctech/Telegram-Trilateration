@@ -7,7 +7,8 @@
 
 ## Test 1
 
-For the first proof of concept test, I picked a random user in the "Near me" list of my actual location in Den Helder. The person I picked is called "Clara".
+For the first proof of concept test, I picked a random user in the "Near me" list of my actual location in Den Helder.\
+The person I picked is called "Clara".
 
 <img src="_assets/tt1_overview.jpg" width="50%"><img src="_assets/tt1_user.jpg" width="50%">
 
@@ -15,11 +16,12 @@ To do a trilateration, I need a tool to do so. I could easily write a tool like 
 
 <img src="_assets/example_excel.jpg" width="75%">
 
-So, how to start pinpointing someone? To determine an exact location of a device, you need at least 3 points with their respective distance. I could either move there myself, or let my computer do the work for me. By using an emulated Android device, I can spoof my GPS location and make Telegram think I am at another location. One Android emulator with GPS spoofing built-in is NOX ([https://www.bignox.com/](https://www.bignox.com/))
+So, how to start pinpointing someone? To determine an exact location of a device, you need at least 3 points with their respective distance. I could either move there myself, or let my computer do the work for me. By using an emulated Android device, I can spoof my GPS location and make Telegram think I am at another location. One Android emulator with GPS spoofing built-in is Nox ([https://www.bignox.com/](https://www.bignox.com/))
 
 <img src="_assets/example_gps.jpg" width="50%">
 
-NOX Allows me to click on a spot on the map, click "Move here" and my GPS location is set. It provides the exact set GPS coordinates which we will use for our trilateration.
+Nox Allows me to click on a spot on the map, click "Move here" and my GPS location is set.\
+It provides the exact set GPS coordinates which we will use for our trilateration.
 
 **The steps for locating someone are rather easy:**
 
@@ -37,14 +39,14 @@ NOX Allows me to click on a spot on the map, click "Move here" and my GPS locati
 <img src="_assets/tt1_location.jpg" width="75%">
 <img src="_assets/tt1_location2.jpg" width="75%">
 
-Which leads me to believe with a high degree of certainty that this user is staying in Hotel Den Helder.
- (Provided they are not also spoofing their location lol)
+Which leads me to believe with a high degree of certainty that this user is staying in Hotel Den Helder.\
+**(Provided they are not also spoofing their location lol)**
 
 ---
 
 ## Test 2
 
-Since asking a stranger "Hey, is this where you currently stay?" seems… you know… odd? I re-did this experiment with a friend of mine. He was currently staying at a random (For me) unknown location in Nijmegen.
+Since asking a stranger *"Hey, is this where you currently stay?"* seems… you know… odd? I re-did this experiment with a friend of mine. He was currently staying at a random (For me) unknown location in Nijmegen.
 
 <img src="_assets/tt2_ask.jpg" width="75%">
 
