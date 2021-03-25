@@ -66,7 +66,7 @@ After I found him, I conducted the same test as on the previous example using th
 
 <img src="_assets/tt2_excel.jpg" width="75%">
 
-I maked some of the data since the result location is a less common place to stay than in Test 1 where it was a hotel. I will mask some other upcoming information as well. This will probably still be reversable but hey, I did my best.
+I masked some of the data since the result location is a less common place to stay than in Test 1 where it was a hotel. I will mask some other upcoming information as well. This will probably still be reversable but hey, I did my best.
 
 After creating this dataset, I rendered a map and collected the results. I replaced the background tiles with a texture instead of the actual map.
 

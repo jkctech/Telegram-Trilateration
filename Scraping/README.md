@@ -1,6 +1,6 @@
 # Scraping
 
-By abusing NOX's GPS spoofing and doing some keyboard, mouse and OCR magic, we can automate tracing users.\
+By abusing Nox's GPS spoofing and doing some keyboard, mouse and OCR magic, we can automate tracing users.\
 Because who has time for doing this by hand?
 
 ---
@@ -49,11 +49,11 @@ Let's have a look at what we're dealing with inside of Telegram by making a new 
 
 <img src="_assets/main.png" width="45%"> <img src="_assets/nearby.png" width="45%">
 
-![](https://via.placeholder.com/15/FF00DC/000000?text=+) **Users**
-![](https://via.placeholder.com/15/FF0000/000000?text=+) **Groups**
-![](https://via.placeholder.com/15/00FF21/000000?text=+) **User Unfolder**
-![](https://via.placeholder.com/15/0026FF/000000?text=+) **User / Group names**
-![](https://via.placeholder.com/15/FF6A00/000000?text=+) **Distances (+ Members when applicable)**
+![](https://via.placeholder.com/15/FF00DC/000000?text=+) **Users**\
+![](https://via.placeholder.com/15/FF0000/000000?text=+) **Groups**\
+![](https://via.placeholder.com/15/00FF21/000000?text=+) **User Unfolder**\
+![](https://via.placeholder.com/15/0026FF/000000?text=+) **User / Group names**\
+![](https://via.placeholder.com/15/FF6A00/000000?text=+) **Distances (+ Members when applicable)**\
 
 Looking at this screen we need to accomplish a few things:
 1. Confirm everything is well aligned
@@ -66,10 +66,10 @@ Looking at this screen we need to accomplish a few things:
 
 Optionally, I wanted to add support to download the profile pictures for the groups and users but that seemed like a lot of extra work for just a proof of concept so that is a postponed feature.
 
-**Confirm everything is well aligned**
+**Confirm everything is well aligned**\
 Before doing magic with mouse and keyboard, I want to make sure we are at the correct screen and it looks like stuff is aligned properly. Multiple methods are used for this. Here are some of them:
 
-To make sure Nox is open (at all) and maximized, we use the Win32 API to get access to that window and maximize it. After that, we are sure we can prceed.
+To make sure Nox is open (at all) and maximized, we use the Win32 API to get access to that window and maximize it. After that, we are sure we can proceed.
 
 <img src="_assets/alignpixels.png" width="75%">
 
@@ -77,17 +77,17 @@ In another example, we will be taking samples of some random pixels inside scree
 
 I take 3 samples of pixels around these 3 points. I know they SHOULD be (From top to bottom) `blue`, `white` and `blue`. If this is not the case, the program aborts.
 
-**Get current GPS coordinates**
+**Get current GPS coordinates**\
 To perform trilaterations, we need to know from what location the GPS spoofer is operating right now. This can be scanned as well. By emulating some keypresses, we can open the GPS window from Nox:
 
 <img src="_assets/gpswindow.png" width="75%">
 
-Here can see the current position and even set a new one if we ever wanted to do so. We use the same OCR engine again, only this time, we have to process the screenshot first. This engine is not made for light text on a dark background, so with some math, we converted that to a black-on-white image. After that, we do some RegEx magic and we have extracted the coordinates.
+Here we can see the current position and even set a new one if we ever wanted to do so. We use the same OCR engine again, only this time, we have to process the screenshot first. This engine is not made for light text on a dark background, so with some math, we converted that to a black-on-white image. After that, we do some RegEx magic and we have extracted the coordinates.
 
-**Unfold the complete list of users**
+**Unfold the complete list of users**\
 As a first obstacle, we need to unfold the complete list of users so we can start scraping without any hiccups. If the "Show More" button is being shown on the screen at all, it will be on the same position every single time. By taking a screenshot of that specific area and looking for "Show More" in the resulted OCR string, we can detect if the list should be unfolded. If so, we simply just click with the mouse there once and we have the complete list on our screen.
 
-**Scroll through the list in a controlled manner for scraping**
+**Scroll through the list in a controlled manner for scraping**\
 Scrolling through the list of chats nearby should not be THAT much of a hassle... Right? By simply dragging our mouse on the screen we can simulate scrolling.
 
 First I created a way for my program to align itself to a specific point on the screen. Every chat has the same height on screen. This is easily spotted by looking at the light grey lines between chats. When I exported this as a screenshot (Using NOX itself), I measured the amount of pixels between those lines. This turned out to be **129 (NATIVE)** pixels. The "Native" in this is important. 
@@ -98,7 +98,7 @@ I have configured the emulator to run a higher resolution than my screen itself 
 
 Scrolling in itself turned out to be an issue as well. You have to move your mouse a certain amount of pixels before the emulator even registers it as a dragging finger. We will call this the **"Scrollbleed"** from now on. After determining the scrollbleed with some tests, I had to sum this to every distance I was about to drag, so this is now fixed.
 
-**Take screenshots of the screen and scrape the characters**
+**Take screenshots of the screen and scrape the characters**\
 Let's have a look at what a single "page" of users looks like.
 
 <img src="_assets/page.png" width="75%">
@@ -117,7 +117,7 @@ distance
 ...
 ```
 
-By simply looping over those lines we can combine them into objects containing a name and distance. By writing a simple RegEx pattern I checked to see if the distances are really distances and that the OCR didn't mess up. In the same step. I also converted these distance strings into integers and made the distances in meters. So `1.75 km away` becomes `1750` as an integer. I also noticed that users are displayed ordered by distance in ascending order. I used this to loop over all distances and check if they are indeed ordered. If not, I assumed something broke in the meantime and I will error out to prevent corrupted or wrong data.
+By simply looping over those lines we can combine them into objects containing a name and distance. By writing a simple RegEx pattern I checked to see if the distances are really distances and that the OCR didn't mess up. In the same step, I also converted these distance strings into integers and made the distances in meters. So `1.75 km away` becomes `1750` as an integer. I also noticed that users are displayed ordered by distance in ascending order. I used this to loop over all distances and check if they are indeed ordered. If not, I assumed something broke in the meantime and I will error out to prevent corrupted or wrong data.
 
 Now we end up with this outpur from the scraper:
 
@@ -135,7 +135,7 @@ Here we also see the scraper found out which entries are **groups** and which ar
 
 Whenever the scraper finds the text **"Create a Local Group"** we start marking chats as groups instead of users. The theoretical edgecase in this, is that if someone has the actual name **"Create a Local Group"**, the scraper starts to mess up... The chances of this are slim so again, we will be ingoring this issue.
 
-**Collect & Export**
+**Collect & Export**\
 For the last part, we simply print all the created chat-objects onto an `xlsx` sheet and we should be ready to go. I made the choice to support the [GPS Visualizer](https://www.gpsvisualizer.com/) format because, why not?
 
 <img src="_assets/excel.png" width="75%">
@@ -173,6 +173,7 @@ This file takes the `.xlsx` from the **Combiner** and calculates estimate locati
 * `GPS Coordinate Scraper` Does not handle negative coordinates very well
 
 **Fixed Isssues:**
+
 -- None, whoops --
 
 **Ignored issues:**
