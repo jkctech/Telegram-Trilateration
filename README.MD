@@ -1,6 +1,12 @@
 # Telegram Trilateration
 
-⚠️ I have tried reaching out to Telegram over email prior to releasing this repository and untill this day, they did not respond. ⚠️
+
+### ⚠️
+```
+I have tried reaching out to Telegram via email.
+After more than 1 month of no reply, I decided to open up this repository.
+```
+**I AM NOT ACCOUNTABLE FOR ANY DAMAGE OR ILLEGAL ACTIVITY DONE BY END USERS! USE AT YOUR OWN RISK AND DISCRETION!**
 
 A while back, Telegram rolled out a new (Opt-in) feature which allows users to find people and groupchats close to their location. Because of poor implementation, this "feature" allows a user to see the distance between them and another user with about 10 meters of accuracy. By using trilateration we are able to pinpoint someone's (near) exact location...
 
