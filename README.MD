@@ -23,6 +23,7 @@ The goal of this repository is to build a proof of concept for mass exploiting t
 * [Scraping](#scraping) (Automating the trilateration)
 * [Webview](#webview) (Using the scraped data)
 * [Groups and User Information](#groups-and-user-information)
+* [Solution](#solution)
 
 ---
 
@@ -79,3 +80,13 @@ By finding someone, you can see their profile picture(s), bio and username. *(De
 Being able to see someone's profile on a "search engine" is to be expected and key to it's functionality but being able to find people this way could open up a doorway for stalkers to find someone or just lurk for random people without them knowing their phonenumber or Telegram username.
 
 <img src="_assets/user.jpg" width="75%">
+
+---
+
+### Solution
+
+I wrote a separate text about how to solve this issue in the most professional and stable way possible.
+
+<img src="_assets/solution.png" width="50%">
+
+<h5><a href="Solution/">Read More ></a></h5></a>
