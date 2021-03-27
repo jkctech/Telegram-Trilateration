@@ -114,7 +114,7 @@ name
 distance
 name
 distance
-...
+etc. ...
 ```
 
 By simply looping over those lines we can combine them into objects containing a name and distance. By writing a simple RegEx pattern I checked to see if the distances are really distances and that the OCR didn't mess up. In the same step, I also converted these distance strings into integers and made the distances in meters. So `1.75 km away` becomes `1750` as an integer. I also noticed that users are displayed ordered by distance in ascending order. I used this to loop over all distances and check if they are indeed ordered. If not, I assumed something broke in the meantime and I will error out to prevent corrupted or wrong data.
