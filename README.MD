@@ -18,6 +18,11 @@ Which is, in my opinion, an understatement.
 
 ---
 
+## See the scraper and webviewer in action
+[![Video](_assets/video.png)](https://www.youtube.com/watch?v=Vgoq8Lp8PUs& "TELEGRAM is a perfectly working app with no exploits - Trilateration Exploit (Stealing locations)")
+
+---
+
 ## Table of Contents
 * [Trilateration](#trilateration) (Finding someone's location)
 * [Scraping](#scraping) (Automating the trilateration & Tools)
