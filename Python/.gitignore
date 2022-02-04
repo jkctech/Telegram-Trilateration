@@ -1,0 +1,6 @@
+venv/
+data/
+test/
+*.session
+*.session-journal
+config.ini
