@@ -8,7 +8,7 @@ Doing this requires about ~30 lines of code, instead of the spaghetti mountain I
 
 **TL;DR**: I made a new script that can do the same thing, only much better and more stable.
 
-<h3><a href="Python/">Read More ></a></h3>
+<h3><a href="API/">Read More ></a></h3>
 
 <hr>
 
