@@ -38,25 +38,30 @@ function drawdata()
 	readSettings();
 
 	// Loop over entries
-	for (var name in data)
+	for (var id in data)
 	{
 		// Ignore existing names
-		if (name in userlayers)
+		if (id in userlayers)
 			continue;
 
-		var item = data[name];
+		var item = data[id];
+
+		var name = id;
+		if (item.hasOwnProperty("name"))
+			name = item.name;
+
 		var display = "[" + item.type.toUpperCase().charAt(0) + "] " + name;
 
 		var layer = getUserLayer(
 			item.circles,
 			item.location,
 			item.color,
-			name,
+			"[" + id + "] " + name,
 			item.type
 		);
 
 		// Save
-		userlayers[name] = layer['layer'];
+		userlayers[id] = layer['layer'];
 
 		// For incomplete users
 		if (layer['markers'].length == 0)
@@ -72,7 +77,7 @@ function drawdata()
 		// Add to global list of elements so we can center properly
 		allfeatures = allfeatures.concat(layer['markers']);
 
-		userlayers[name].addTo(map);
+		userlayers[id].addTo(map);
 
 		// Append layer
 		layercontrol.addOverlay(layer['layer'], display);

@@ -1,5 +1,7 @@
 # Scraping
 
+**Please note:** This method has become obsolete because of the API method. Help requests for this portion of the project will no longer be answered.
+
 By abusing Nox's GPS spoofing and doing some keyboard, mouse and OCR magic, we can automate tracing users.\
 Because who has time for doing this by hand?
 

@@ -1,7 +1,19 @@
 # Telegram Trilateration
 
+## ✨ UPDATE: API method
 
-### ⚠️
+Turns out Telegram offers the possibility to request people nearby using their API. This means what the entirety of the **"Scraping"** section in this repository became obsolete... *Sigh...*
+
+Doing this requires about ~30 lines of code, instead of the spaghetti mountain I created by making an entire **OPTICAL OCR SCRAPER AND PARSER**... What was I thinking anyway?
+
+**TL;DR**: I made a new script that can do the same thing, only much better and more stable.
+
+<h3><a href="API/">Read More ></a></h3>
+
+<hr>
+
+
+### ⚠️ Disclaimer
 ```
 I have tried reaching out to Telegram via email. (Feb 22th 2021)
 After more than 1 month of no reply, I decided to open up this repository.
@@ -43,7 +55,7 @@ Using this technique combined with GPS spoofing, we can determine a user's where
 
 ---
 
-### Scraping
+### Scraping (Obsolete)
 
 Locating someone by hand takes time (A few minutes) and effort (Clicking and typing). It will probably take you +-30 minutes to track someone by hand.
 So naturally, I spent weeks of effort into automating this system to save myself minutes of time...
