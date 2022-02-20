@@ -63,7 +63,7 @@ async def find(lat, lon):
 		name = name.strip()
 
 		# Save profile picture
-		if (config['settings']['profilepictures'].lower() == "true"):
+		if (config['settings']['profilepictures']):
 			path = "{}{}_{}.jpg".format(config['settings']['profilepicturespath'], prefix, id)
 			if os.path.exists(path) == False:
 				await client.download_profile_photo(ent, file=path)
