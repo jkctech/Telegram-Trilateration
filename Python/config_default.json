@@ -1,0 +1,15 @@
+{
+	"api": {
+		"api_id": "6969",
+		"api_hash": "420420"
+	},
+	"settings": {
+		"profilepictures": true,
+		"profilepicturespath": "data/profiles/"
+	},
+	"points": [
+		[52.9435548, 4.7212,17],
+		[52.9294912, 4.7842015],
+		[52.9607238, 4.7702266]
+	]
+}

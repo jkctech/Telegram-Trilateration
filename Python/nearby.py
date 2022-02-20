@@ -1,6 +1,5 @@
 import warnings
 import asyncio
-import configparser
 import os
 import json
 
@@ -15,26 +14,19 @@ from utils import trilaterate, utils
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 # Read config
-config = configparser.ConfigParser()
-config.read("config.ini")
+config = json.load(open("config.json"))
 
 # Apply config
-api_id = config['API']['api_id']
-api_hash = config['API']['api_hash']
-
-# Sample points
-points = [
-	[52.9454131, 4.7400286],
-	[52.9518438, 4.7745544],
-	[52.9292854,4.7660118]
-]
+api_id = config['api']['api_id']
+api_hash = config['api']['api_hash']
+points = config['points']
 
 # Storage
 result = {}
 
 # Preparations
-if (config['SETTINGS']['profilepictures'] and os.path.exists(config['SETTINGS']['profilepicturespath'])):
-	Path(config['SETTINGS']['profilepicturespath']).mkdir(parents=True, exist_ok=True)
+if (config['settings']['profilepictures'] and os.path.exists(config['settings']['profilepicturespath'])):
+	Path(config['settings']['profilepicturespath']).mkdir(parents=True, exist_ok=True)
 
 # Setup client
 client = TelegramClient("trilat", api_id, str(api_hash))
@@ -71,8 +63,8 @@ async def find(lat, lon):
 		name = name.strip()
 
 		# Save profile picture
-		if (config['SETTINGS']['profilepictures'].lower() == "true"):
-			path = "{}{}_{}.jpg".format(config['SETTINGS']['profilepicturespath'], prefix, id)
+		if (config['settings']['profilepictures'].lower() == "true"):
+			path = "{}{}_{}.jpg".format(config['settings']['profilepicturespath'], prefix, id)
 			if os.path.exists(path) == False:
 				await client.download_profile_photo(ent, file=path)
 		
