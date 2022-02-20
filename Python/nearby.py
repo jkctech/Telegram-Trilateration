@@ -67,9 +67,11 @@ async def find(lat, lon):
 			ent = await client.get_entity(id)
 			name = ent.title
 			enttype = "Group"
+		
+		name = name.strip()
 
 		# Save profile picture
-		if (config['SETTINGS']['profilepictures']):
+		if (config['SETTINGS']['profilepictures'].lower() == "true"):
 			path = "{}{}_{}.jpg".format(config['SETTINGS']['profilepicturespath'], prefix, id)
 			if os.path.exists(path) == False:
 				await client.download_profile_photo(ent, file=path)
@@ -125,13 +127,14 @@ for id in result.keys():
 
 	if loc == False:
 		print("\tERROR: Could not resolve location.")
+		result[id]['location'] = False
 	else:
 		print("\tEstimated location: {}".format(loc))
 		result[id]['location'] = list(loc)
 
 # Save to file
 print("Saving to file...")
-path = "data/{}.json".format(datetime.now().strftime("%d-%M-%Y_%H-%M-%S.%f"))
+path = "data/{}.json".format(datetime.now().strftime("%Y-%m-%d_%H-%M-%S.%f"))
 outfile = open(path, 'wb')
 outfile.write(json.dumps(result, indent=4).encode("UTF-8"))
 outfile.write(b"\n")
