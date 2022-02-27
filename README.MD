@@ -1,5 +1,26 @@
 # Telegram Trilateration
 
+## 🎉 Telegram Finally listened! 🥳
+
+It took them over a **YEAR** to realize their mistake but they **FINALLY** lowered the accuracy of the "People Nearby" function.
+Or it might be that the huge sudden **outburst of negativity from Russian and Ukrainian media** has finally made them come to senses ¯\\\_(ツ)_/¯
+
+Either way, when you run the function now, you will only see results of `500m`, `1km`, `2km`, etc.
+I have little faith left in Telegram when it comes to privacy and taking issues seriously.
+This repository will stay online, but be adviced that none of the data collection methods in here will work as expected.
+
+### Some posts about this repository:
+
+[UA] (<a href="https://focus.ua/uk/digital/507002-vychislyat-dazhe-prezidenta-telegramm-pozvolyaet-uznat-koordinaty-lyudeyu-s-tochnostyu-do-metra">Focus.ua</a>) Вирахують навіть президента: Telegram дозволяє дізнатися координати людей із точністю до метра
+
+[RU] (<a href="https://zoom.cnews.ru/news/item/544035">CNews.ru</a>) Telegram превратился в легальное средство слежки за передвижениями пользователей
+
+[RU] (<a href="https://habr.com/ru/post/652015/">Habr.com</a>) Telegram позволяет узнавать координаты людей с точностью до метра
+
+[EN] (<a href="https://os2int.com/toolbox/applying-effective-osint-to-geo-monitor-russian-military-activity/">OS2INT.com</a>) APPLYING EFFECTIVE OSINT TO GEO-MONITOR RUSSIAN MILITARY ACTIVITY
+
+<hr>
+
 ## ✨ UPDATE: API method
 
 Turns out Telegram offers the possibility to request people nearby using their API. This means what the entirety of the **"Scraping"** section in this repository became obsolete... *Sigh...*
@@ -105,4 +126,5 @@ Being able to see someone's profile on a "search engine" is to be expected and k
 # PLEASE TELEGRAM, JUST ROUND THE DISTANCES TO WHOLE KILOMETERS...
 
 There is literally no good reason to show random people a distance **THIS** accurate...
+(Was not so hard after all, was it?)
 
